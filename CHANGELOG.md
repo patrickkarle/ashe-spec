@@ -4,6 +4,34 @@ Reverse-chronological record of architectural decisions and significant artifact
 
 ---
 
+## [2026-05-28] **ADR-019 v0.2 — phor-scoped governance refinement**
+
+ADR-019 amended to v0.2 incorporating phor-scoped governance frame as a load-bearing architectural layer that mediates occupant authority.
+
+**What's tightened in v0.2**:
+
+1. **Phor-scoped governance** — Phor is named explicitly as a *governance cell with local constitutional authority*, not a task node or prompt wrapper. The governance stack (Construct law → ASHE protocol → occupant lease → phor-scoped governance → phoreme directives → node-level subagent insertion → provider/model/tool execution → result envelope → phor acceptance → canonical host state) is documented as the canonical authority chain.
+
+2. **Phoremes as local execution law** — Phoremes carry executable governance directives (role, procedure, validation, constraints, gates, acceptance criteria, escalation rules), not just prompt fragments.
+
+3. **Execution classes vs orchestration substrates** — Dynamic Workflows are named as orchestration substrate, NOT a fourth execution class. A workflow-spawned subagent is an agent-worker (or occupant, if explicitly leased) — the workflow is the mechanism, not the identity. Three execution classes remain: provider-call / agent-worker / occupant.
+
+4. **Attenuated-delegation invariant** — Subagents spawned by an occupant do NOT inherit occupant authority by default. They receive attenuated, phor-scoped authority. ADR-019 lists 10 explicit authority invariants.
+
+5. **Schema sketch** — Informative JSON shape for phor execution binding, occupant-only fields, and phor governance contract. Prevents accidental promotion of every worker into an occupant.
+
+6. **Vocabulary terms** — execution presence, phor-scoped governance, node-level subagent insertion, occupant-executor, attenuated delegation, result envelope, resident lease, orchestration substrate. Standardized for consistent use across protocol + reference implementations.
+
+7. **Current implementation boundary** — Explicit current-vs-target distinction. The reference implementation has worker-dispatch primitives and occupancy design intent; full occupant-executor governance remains target architecture.
+
+8. **What-to-avoid table** — 6 overclaims explicitly listed with corrected phrasing.
+
+**Status**: Remains `Proposed` pending working-code validation per ADR-015 methodology.
+
+**Authorship**: Patrick Karle clarification, 2026-05-28.
+
+---
+
 ## [2026-05-28] **Public spec repo published (v0.x)**
 
 **What**: Initial public publication of the ASHE protocol specification. Repository structure: MANIFESTO + VISION + CASE-FOR-NOW (the load-bearing narrative artifacts) + 18 ADRs (the architectural decision discipline trail) + this changelog. Published under Apache 2.0 with explicit patent grant.
