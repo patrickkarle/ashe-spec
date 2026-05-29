@@ -1,0 +1,17 @@
+ASHE — Capability-Broker Protocol for the Agent Era
+Copyright 2026 Phor / Patrick Karle
+
+This product includes specification text, architectural decision records,
+and accompanying materials developed by Phor (https://phor.io) within
+Continuum, Phor's integrated environment for agentic composition.
+
+Licensed under the Apache License, Version 2.0 (the "License"); see the
+LICENSE file in the root of this repository.
+
+ASHE is a trademark-pending name. "Phor" is a registered trademark held
+by Patrick Karle. The architectural framing and specification text are
+authored by Patrick Karle under the Phor umbrella.
+
+Contributions to this protocol are welcomed under the terms of the
+Apache 2.0 License. By submitting a Contribution, you affirm the terms
+of Section 5 (Submission of Contributions) of the License.

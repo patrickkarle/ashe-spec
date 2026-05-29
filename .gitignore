@@ -1,0 +1,20 @@
+# Internal publish-tracker (not part of the public spec repo)
+PUBLISH-PLAN.md
+
+# Internal git/publish instructions (not part of the public spec repo)
+GIT-PUBLISH-INSTRUCTIONS.md
+SOCIAL-ANNOUNCEMENT.md
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*~
+.idea/
+.vscode/
+*.swp
+
+# Backup files
+*.bak
+*.bak-*
+*.bak.*
+_archive_backup/
