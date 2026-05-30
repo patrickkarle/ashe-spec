@@ -302,6 +302,92 @@ The architectural convergence between ASHE (published 2026-05-28) and Cloudflare
 
 ---
 
+### 1.10 External validation — HUMAN Security 2026 State of AI Traffic & Cyberthreat Benchmark
+
+HUMAN Security's *2026 State of AI Traffic & Cyberthreat Benchmark Report* (a Quadrillion Research Report; analysis derived from over **one quadrillion interactions** observed by the Human Defense Platform across HUMAN's customer base, 2022-2025) provides the second independent external validation for ASHE's architectural commitments — and it validates a *different* dimension of ASHE than the Cloudflare evidence in §1.9: where Cloudflare validates ASHE's tri-surface web-side architecture, HUMAN validates ASHE's intent-declaration + capability-mediation + trust-governance architecture.
+
+#### 1.10.1 The empirical data (HUMAN Defense Platform, 1Q+ interactions in 2025)
+
+- **Automated traffic grew 8× faster than human traffic** year-over-year (23.51% vs 3.10%)
+- **Monthly AI-driven traffic grew 187%** January-December 2025 (nearly tripled in one calendar year)
+- **Agentic AI traffic grew 7,851% year-over-year** — the steepest growth curve in the dataset
+- **AI-driven traffic operator concentration**: OpenAI ~69%, Meta ~16%, Anthropic ~11% — three operators account for ~96% of all observed AI bot traffic by volume
+- **Vertical concentration**: more than 95% of AI-driven traffic in three industries (retail/e-commerce, streaming/media, travel/hospitality)
+- **Agentic page-category distribution**: 77% on product/search pages, 8.82% on account pages, 4.95% on authentication flows, 2.31% on checkout pages — agents are **transacting**, not just reading
+- **Post-login account compromise attempts quadrupled YoY** — average 402,000 per organization in 2025 (vs 92,754 in 2024 and 46,799 in 2023)
+- **Median scraping attack rate ~20% of traffic globally** in 2025 (double 2022's rate)
+- **Carding volume up 250% since 2022**
+
+#### 1.10.2 The HUMAN-named architectural insight: intent is the load-bearing distinction
+
+HUMAN's published framing — the single most ASHE-aligned external statement in the 2026 evidence corpus:
+
+> *"An AI agent rapidly browsing products and completing a checkout may be a consumer's shopping assistant or an automated fraud operation. The behavior is the same. The intent is not. Across all interactions analyzed by the Human Defense Platform, only one half of one percent separates the rate of benign automation from the rate of malicious automation. The old binary of 'bot or not' no longer holds. Organizations need the ability to understand the intent behind every interaction and apply trust dynamically, from first visit to final transaction. The agentic internet is here, and the need for trust infrastructure that operates at its speed and scale is immediate."*
+>
+> — HUMAN Security, *2026 State of AI Traffic & Cyberthreat Benchmark Report*
+
+This is the precise architectural conclusion [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md) and the broader ASHE intent-declaration architecture reach. HUMAN's quantitative finding — **only 0.5% separates benign from malicious automation rates** — empirically validates the load-bearing claim that *behavior alone is insufficient to determine trustworthiness; intent declaration at the protocol layer is required*.
+
+#### 1.10.3 HUMAN's vendor-specific implementation = the proprietary version of what ASHE standardizes
+
+HUMAN has built a product called **AgenticTrust** to operationalize the intent-driven trust framework their own research demonstrates is required. Their published description:
+
+> *"HUMAN's AgenticTrust builds on HUMAN's Sightline as the trust and control layer for agentic AI. It turns unknown AI traffic into visible, controllable, and trusted interactions by detecting AI agent actions and intent, verifying their trust level, and governing how agents interact with web applications."*
+
+Reading that sentence against ASHE's architectural commitments:
+
+| HUMAN AgenticTrust capability | ASHE protocol primitive |
+|---|---|
+| "Detecting AI agent actions and intent" | Intent-declaration surfaces (`user-directed` / `task-directed` / `autonomous-cascade`) per [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md) |
+| "Verifying their trust level" | Capability lease issuance + scope-bounded authority per [ADR-014](decisions/ADR-014-phased-enforcement-model.md) phased enforcement |
+| "Governing how agents interact with web applications" | Web-side `.well-known/ashe` handshake convention per [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md) + capability mediation per [ADR-019](decisions/ADR-019-execution-class-distinction.md) |
+| "Visible, controllable, and trusted interactions" | Audit trail + observability per [ADR-013](decisions/ADR-013-multi-service-architecture.md) AuditService |
+
+**HUMAN's AgenticTrust is the vendor-specific implementation of what ASHE proposes as a cross-vendor protocol.** Every component HUMAN names corresponds to an ASHE architectural primitive.
+
+#### 1.10.4 AI agents are already weaponized for the attack surface
+
+HUMAN's threat-intelligence team (Satori) documented multiple specific cases where AI agents are being used as attack tools:
+
+- **AI agents conducting carding-like sequences**: Satori observed a "checking" pattern executed by an AI browser agent — 11 card-add attempts + 6 payment attempts across two sessions, followed by pivot to loyalty-point redemption after card paths failed
+- **AI crawler spoofing**: a significant portion of requests claiming to be ChatGPT, Mistral, and Perplexity bots did NOT originate from those operators' infrastructure — attackers spoof user-agent strings to exploit organizational trust extended to recognized AI crawlers, bypassing robots.txt allowlists and rate-limit exemptions
+- **OpenClaw gateway abuse**: synthetic referral traffic generation, automated reconnaissance via high-velocity directory brute-forcing, infostealer malware exfiltrating API keys and agent identity data
+
+These observations validate the [§2.2 agentic weaponization](#22-agentic-weaponization--autonomous-ai-in-adversarial-hands) class of incidents — but at scale-of-the-network rather than at single-incident scale. HUMAN's data shows the pattern is industrial, not anecdotal.
+
+#### 1.10.5 The convergent-validation pattern (3 vendors, 3 dimensions)
+
+Combining §1.9 (Cloudflare) and §1.10 (HUMAN) with prior landscape evidence yields a **multi-vendor convergent-validation pattern** — multiple independent industry actors building vendor-specific solutions that map to different dimensions of ASHE's cross-vendor protocol:
+
+| Vendor | Vendor-specific implementation | ASHE protocol-tier dimension validated |
+|---|---|---|
+| **Cloudflare** | "Separate cache layer for AI traffic with task-type routing" (long-term direction); AI Index, Markdown for Agents, AI Crawl Control, Pay Per Crawl, block-by-default | Tri-surface architecture (agent + dev + web); ADR-018 web-side convention; intent declarations matching "task-type" cache handling |
+| **HUMAN Security** | AgenticTrust product: intent detection + trust verification + agent governance | Intent-declaration architecture; capability-lease + scope-bounded authority; cross-surface audit |
+| **Wikimedia** | Kaggle-distributed structured JSON datasets for AI training (workaround for bulk-scraping bandwidth costs) | Structured-response negotiation at protocol boundary |
+| **Anthropic** | Claude Code permission system (6 modes, sandboxed Bash, dev container) | Per-implementation enforcement primitives at Layer 1-2 (cooperating SDK + runtime hook); ADR-017 sealed-workspace precedent |
+
+Three frontier-grade vendors with three different empirical operational pressures (cache economics, fraud detection, bandwidth costs, dev-environment safety) converge on the same architectural conclusion: **intent-aware, capability-mediated, scope-bounded, audit-trail-preserving governance of AI agent operations**. ASHE is the cross-vendor protocol that standardizes what they are individually inventing.
+
+The cost of NOT standardizing: N×M vendor-pair integration cost continues to compound. Every site operator must integrate with every AI vendor's proprietary trust scheme. ASHE collapses this to N+M (one protocol implementation per side).
+
+#### 1.10.6 Strategic implication
+
+The HUMAN data further validates [§1.8](#18-the-compound-benefit-case--the-politics-of-rejection)'s compound benefit case — particularly the previously-theoretical "responsible full-capability model release" and "cross-vendor coordination" dimensions:
+
+| Claim (previously) | Now empirically validated |
+|---|---|
+| "Cross-vendor coordination — one protocol, many implementations" | Cloudflare, HUMAN, Wikimedia, Anthropic, others all independently building proprietary versions of intent-aware capability-mediation. The standardization opportunity is empirically present + structurally pressing. |
+| "Bounded outcomes ≠ censored behavior — enabling responsible full-capability model release" | HUMAN's data shows AI agents are now performing autonomous transactions (2.31% of agentic traffic on checkout flows). The capability already exists in production. The bounded-outcomes-protocol layer is the only credible answer to responsible deployment that preserves capability. |
+| "Patch-window containment (addresses unpatched-exposure surface)" | HUMAN's 402K post-login compromise attempts per organization + 0.5% margin between benign and malicious automation rates establish that detection-and-block is insufficient. Bounded-blast-radius via capability lease is the structural answer. |
+| "Frictionless capability mediation" | HUMAN explicitly frames the operational pressure: organizations that treat all automation as hostile will block revenue; those that allow it unchecked will absorb fraud. ASHE's frictionlessness principle (ADR-017 Commitment 2) is the only architectural posture that resolves this dichotomy. |
+
+#### 1.10.7 Citations
+
+- HUMAN Security. (2026). *The 2026 State of AI Traffic & Cyberthreat Benchmark Report*. A Quadrillion Research Report from the Human Defense Platform.
+- Satori Threat Intelligence (HUMAN Security). 2025-2026 threat research publications referenced within the report.
+
+---
+
 ## 2. Documented agent failure incidents[^incidents-source]
 
 [^incidents-source]: Incidents compiled 2026-05-25 from contemporary public-record sources including Bloomberg, VentureBeat, CNBC, The Block, court filings, and corporate disclosures. Pre-2026 cases (Mata v. Avianca, Air Canada chatbot, Cohen/Bard) are independently verified against author training data through January 2026. 2026 incidents are cited per the sources named; readers seeking primary-source confirmation should consult the named outlets. This section will be updated as additional incidents are publicly documented; correction-requests for any inaccuracy welcomed via the standard contribution process.
