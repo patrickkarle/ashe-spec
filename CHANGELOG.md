@@ -4,6 +4,53 @@ Reverse-chronological record of architectural decisions and significant artifact
 
 ---
 
+## [2026-05-30] **ADR-020 — weightlessness is conformant only under proper application**
+
+Promotes the "proper application — the resolving discipline" principle from a WEIGHTLESS.md design note to a **binding conformance gate**. "Weightless" becomes a falsifiable four-part predicate, not an adjective.
+
+**The gate**: an ASHE implementation MAY claim the four hard invariants (no delay / no bandwidth / no data alteration / no interference) on the steady-state path **only if** it satisfies all four facets of proper application, conjunctively:
+
+- **What** — authority modeled as object-capability (*held or absent*); an unauthorized action MUST be *unnameable*, not checked-and-denied.
+- **How** — the routine-path boundary MUST be **structural** (the substrate's own mechanism per [ADR-014](decisions/ADR-014-phased-enforcement-model.md) Layer 2/3/4), not a procedural check ASHE runs as an added step.
+- **When** — the boundary MUST be established **at construction** (wall-up-first, `ashe workspace init` as step 1 per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md)), not bolted on as a front gate.
+- **Where** — literal-zero applied to the ~98% routine path; deliberate weight concentrated at the ~2% Tier C boundary. Uniform enforcement fails this facet.
+
+**What it forbids**: claiming "weightless" for a fast-but-real per-action check (a fast check is still a check), a permission-flag/identity model, a retrofitted gate, or uniform enforcement of the routine path.
+
+**Layer-1 caveat**: cooperating-SDK implementations are not disqualified — they MUST disclose, per [ADR-015](decisions/ADR-015-validation-methodology-and-tiered-claims.md) evidence grades, that no-delay/no-bandwidth are **amortized-small (Layer 1)** rather than **literal-zero (Layer 3/4 structural property)**. The gate distinguishes *honest amortized-small* from *false literal-zero*.
+
+**Status**: Accepted. `Builds on` ADR-007, ADR-009, ADR-014, ADR-015, ADR-017. No ADR superseded. INDEX.md and WEIGHTLESS.md cross-reference it.
+
+---
+
+## [2026-05-30] **WEIGHTLESS.md — the weightlessness design principle**
+
+New companion artifact consolidating ASHE's "frictionless by mandate / TLS for the agent layer" promise into a single named engineering property and budget.
+
+**Core principle**: weightlessness is the *placement* of cost, not its absence — *pay once at an amortizable boundary (handshake, intent declaration, lease issuance); make the steady-state per-action path a local check with no network callout, no model token, and no human prompt.* The same handshake-vs-symmetric-crypto split TLS uses, generalized from bytes to actions.
+
+**What it adds**:
+
+1. **Axes-of-weight table** — names every axis a protocol layer can be *felt* on (latency, wire/token, cognitive, footprint, model-layer, adoption) and maps each to the existing ASHE mechanism that drives it toward zero, with ADR anchors.
+
+2. **Hot-path budget** — promotes the [ADR-007](decisions/ADR-007-interception-chain-pattern.md) locally-validated capability token from "v1 optimization" to the steady-state default; separates the rare slow path (Tier C, broker callout) from the routine fast path (in-process validation, sub-millisecond).
+
+3. **Evidence grades** — weightlessness claims tiered Floor/Target/Stretch per [ADR-015](decisions/ADR-015-validation-methodology-and-tiered-claims.md); only the <5 ms p99 interceptor bound and the arXiv 2511.23281 structured-over-HTML result are Floor-grade.
+
+4. **Honest limits** — the Tier C friction floor, cold-start boundary cost, the revocation-vs-token-speed trade, and audit-write cost are named as irreducible; weightlessness is *over a session*, not *over a single isolated call*.
+
+5. **Conformance budget** — a checkable per-property budget table; the one-line test: a routine action costs no round-trip, no token, no human attention — and the audit record still exists.
+
+6. **The four hard invariants** — strict statement of weightlessness as absolutes: *no delay, no added bandwidth, no data alteration, no interference.* No-data-alteration is Floor-contractual ([ADR-007](decisions/ADR-007-interception-chain-pattern.md): idempotent, no dispatch-state mutation — pass/deny, never rewrite); no-interference-with-surfaces is Floor-constructional ([ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md) additive + [ADR-009](decisions/ADR-009-deployment-profiles.md) graceful degradation). The honest tension is named: *active enforcement is interference by definition* — literal-zero holds only for pre-authorized actions and structurally-bounded denials, with remaining enforcement weight concentrated at the rare Tier C boundary where interference is the intended function.
+
+7. **Structural vs procedural mediation** — the path to literal zero on delay/bandwidth is making the capability boundary *structural* (object-capability: an unforgeable reference you were never handed is an absence, not a denied check) rather than *procedural* (a check that runs). True-zero is a Layer 3/4 property per [ADR-014](decisions/ADR-014-phased-enforcement-model.md) — where the boundary stops being a step on the path and becomes part of the system's shape, enforced by the substrate's existing mechanism (type system / OS capability / hardware root) at no added cost.
+
+8. **Proper application — the resolving discipline** — weightlessness is not a mechanism you install; it is the default state of a system whose authority boundaries were applied correctly, forfeited the instant they are applied incorrectly. "Properly apply" is four facets of one discipline, all required together: the object-capability primitive (*what*), structurally (*how*), at construction (*when*), on the dominant path (*where*). Drop any one and weight reappears. The point: proper application *removes* the work rather than accelerating it — a fast check is still a check, still weight; weightless means there is no check at all on the path that matters.
+
+**Status**: Companion design note (v0.x), consistent with the existing artifact bundle. No ADR superseded; cross-references [ADR-007](decisions/ADR-007-interception-chain-pattern.md), [ADR-009](decisions/ADR-009-deployment-profiles.md), [ADR-012](decisions/ADR-012-wire-format-grpc-protobuf-with-projections.md), [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md), [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md).
+
+---
+
 ## [2026-05-28] **ADR-019 v0.2 — phor-scoped governance refinement**
 
 ADR-019 amended to v0.2 incorporating phor-scoped governance frame as a load-bearing architectural layer that mediates occupant authority.
