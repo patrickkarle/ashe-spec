@@ -4,6 +4,10 @@ PUBLISH-PLAN.md
 # Internal git/publish instructions (not part of the public spec repo)
 GIT-PUBLISH-INSTRUCTIONS.md
 SOCIAL-ANNOUNCEMENT.md
+HN-ANNOUNCEMENT-DRAFT.md
+
+# Scratchpad files
+.bak-scratchpad-*
 
 # OS / editor cruft
 .DS_Store
