@@ -72,6 +72,23 @@ The cost was paid twice, both off the hot path: once at **issuance** (a boundary
 
 ---
 
+## Proper application — the resolving discipline
+
+Weightlessness is difficult to *resolve* because it is not a mechanism you install — it is **the default state of a system whose authority boundaries were applied correctly, and it is forfeited the instant they are applied incorrectly.** A misapplied ASHE is not a lighter middleware; it is just middleware. The property holds, or it doesn't, depending entirely on how it is applied. "Properly apply" is four facets of one discipline — all four required together; drop any one and the property collapses:
+
+| Facet | Proper application (weightless) | Improper application (collapses to middleware) |
+|---|---|---|
+| **What** — the primitive | Object-capability: authority is *held or absent*; zero ambient authority anywhere. An unauthorized action is an unnameable one. | Permission flags checked against an identity — a lookup that always runs. |
+| **How** — the mechanism | Structural: the boundary is the substrate's existing mechanism (type system / OS capability / hardware root). No step added to the path. | Procedural: a check ASHE executes per action — non-zero latency and bytes, forever. |
+| **When** — the moment | At construction: wall up first, develop inside ([ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md), `ashe workspace init` as step 1, like `git init`). The system is *shaped* around the boundary. | Bolted on after the fact as a gate in front of an already-built system — always a check that runs. |
+| **Where** — the scope | True-zero applied to the ~98% routine path; deliberate weight concentrated at the ~2% Tier C boundary where interference is the intended function. | The 98% checked the same way as the 2% — uniform enforcement turns every routine action into a gated one. |
+
+The four are not alternatives; they compose into a single test. **Apply the object-capability primitive (what), structurally (how), at construction (when), to the dominant path (where) — and the four invariants hold for free, because the substrate already does the work and the decision was made before the action existed.** Miss any one facet and weight reappears: the wrong primitive forces a lookup, procedural application forces a path step, late application forces a gate, uniform scope forces a check on every routine action.
+
+This is why "weightless" is hard. It is not achieved by optimizing a check until it is fast — a fast check is still a check, still non-zero, still weight. It is achieved by applying the boundary such that **there is no check at all** on the path that matters. Proper application removes the work; it does not accelerate it.
+
+---
+
 ## 1. Latency — the hot-path budget
 
 The interception contract in [ADR-007](decisions/ADR-007-interception-chain-pattern.md) already fixes the hard number: any pre-dispatch interceptor must meet **<5ms p99 latency, deterministic, idempotent, no dispatch-state mutation.** That is the ceiling. Weightlessness is about getting the *typical* case far below it.
