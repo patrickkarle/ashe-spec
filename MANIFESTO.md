@@ -192,6 +192,26 @@ The work is conducted under the principle that **honest evidence-graded claims s
 
 ---
 
+## External validation (as of 2026-05-29)
+
+Within 48 hours of initial publication, seven independent sources across five credibility categories converged on architectural commitments ASHE specifies:
+
+| Source | Category | Validates |
+|---|---|---|
+| Cloudflare (Wildani & Ahmad, 2026; Zhang et al., ACM SoCC 2025) | Industry operational + research | Tri-surface web-side cache architecture |
+| HUMAN Security (2026 State of AI Traffic report; 1+ quadrillion interactions) | Industry threat intelligence | Intent declaration + trust governance |
+| Google Cloud (AI Agent Trends 2026; n=3,466 enterprise survey) | Frontier-vendor strategic disclosure | Multi-protocol stack + capability-mediation gap explicitly named |
+| Lù, Kamath, Mosbach, Reddy (arXiv:2506.10953, 2025) | Academic research pipeline | "Agentic Web Interface" with six guiding principles |
+| Kenny & Pogrebna (Harvard Business Review, 2026) | Executive business strategy | "In an AI-mediated marketplace, the first customer is the algorithm" |
+| Jeske (Siteimprove, 2025) | Operator-practice decisioning | Empirical operator governance frameworks already deployed |
+| Wikimedia (operational data on Kaggle distribution workaround) | Industry operational workaround | Structured-data-for-agents negotiation |
+
+The convergence is structural, not coincidental. The architecture is what the operational reality + research + business strategy + operator decisioning + academic position collectively force.
+
+Full evidence with primary-source citations in [CASE-FOR-NOW.md §1.9-§1.13](CASE-FOR-NOW.md).
+
+---
+
 ## A note on intellectual honesty
 
 ASHE has been developed through iterative dialogue between PK (Patrick Karle) and Claude (Anthropic) over multiple sessions in early 2026. The dialogue has been adversarial in the productive sense: ideas have been stress-tested, overclaims corrected, framings refined, refutations anticipated and answered. The work has scars from challenge.
