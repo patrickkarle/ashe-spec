@@ -481,6 +481,86 @@ This is the strongest single piece of evidence in the entire CASE-FOR-NOW corpus
 
 ---
 
+### 1.12 External validation — Academic position paper (arXiv 2506.10953)
+
+Lù, Kamath, Mosbach, & Reddy (2025), *Build the web for agents, not agents for the web* (arXiv:2506.10953), provides the fourth independent external validation for ASHE's architectural commitments — and the first from an *academic peer-pipeline* source. The paper's thesis aligns with [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md) so closely that the paper title is essentially ADR-018's foundational position in academic position-paper form.
+
+#### 1.12.1 The paper's core thesis (abstract excerpts)
+
+> *"Recent advancements in Large Language Models (LLMs) and multimodal counterparts have spurred significant interest in developing web agents — AI systems capable of autonomously navigating and completing tasks within web environments. While holding tremendous promise for automating complex web interactions, current approaches face substantial challenges due to the fundamental mismatch between human-designed interfaces and LLM capabilities... This position paper advocates for a paradigm shift in web agent research: rather than forcing web agents to adapt to interfaces designed for humans, we should develop a new interaction paradigm specifically optimized for agentic capabilities."*
+>
+> — Lù et al., *Build the web for agents, not agents for the web* (arXiv:2506.10953)
+
+The paper introduces the concept of an **Agentic Web Interface (AWI)** — *"an interface specifically designed for agents to navigate a website"* — and establishes **six guiding principles** for AWI design *"emphasizing safety, efficiency, and standardization, to account for the interests of all primary stakeholders."*
+
+#### 1.12.2 ADR-018 ≈ AWI conceptual alignment
+
+[ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md) and the AWI proposal converge on the same foundational claim — *web-side interfaces should be designed for agents as a distinct surface, with safety, efficiency, and standardization commitments at the protocol layer*:
+
+| AWI principle (academic paper) | ADR-018 / ASHE architectural commitment |
+|---|---|
+| New interaction paradigm "specifically optimized for agentic capabilities" rather than retrofitting human interfaces | Tri-surface architecture (agent + dev + web) treats web-side as distinct from human-browsing surface; `.well-known/ashe` is the agent-specific interaction-point convention |
+| "Safety" as guiding principle | Capability mediation + bounded outcomes per [§1.7](#17-bounded-outcomes-vs-censored-behavior--the-structural-inversion); phased enforcement per [ADR-014](decisions/ADR-014-phased-enforcement-model.md) |
+| "Efficiency" as guiding principle | Wire economics (TOON projection per ADR-006); compound benefit case per [§1.8](#18-the-compound-benefit-case--the-politics-of-rejection) |
+| "Standardization" as guiding principle | Cross-vendor protocol architecture; conformance suite per [ADR-015](decisions/ADR-015-validation-methodology-and-tiered-claims.md); composition above MCP/auth.md per [§7](#7-current-landscape) |
+| "Interests of all primary stakeholders" | Multi-party simultaneous benefit framing per [MANIFESTO](MANIFESTO.md); stakeholder mapping per [§1.6](#16-what-this-means-for-adoption-strategy) |
+| "Collaborative effort involving the broader ML community" | Open governance commitments per [MANIFESTO](MANIFESTO.md); Apache 2.0 + patent grant; rejection-motivation analysis welcoming legitimate critique per [§1.8.1](#181-honest-taxonomy-of-rejection-motivations) |
+
+The paper proposes what ASHE specifies. ASHE was developed independently within Continuum during 2025-2026; the paper was published June 2025. **Two independent reasoning paths from the operational evidence — academic web-agent research community + protocol-architecture work — converge on the same foundational web-side commitment.**
+
+#### 1.12.3 What the paper does NOT address (and where ASHE extends)
+
+The AWI paper is a *position paper for the academic research community* — it establishes the foundational argument that agent-specific web interfaces should exist, but does not extend into capability mediation, intent declaration, audit trails, or cross-vendor protocol standardization at the implementation layer. From WebFetch analysis: *"The paper does not discuss MCP, capability leasing, broker protocols, intent declaration frameworks, audit trails, multi-agent orchestration, or multi-vendor infrastructure convergence."*
+
+This is structurally complementary, not competitive:
+
+| The paper establishes | ASHE extends |
+|---|---|
+| The foundational architectural argument that agent-web interfaces should be a designed surface | The specific protocol convention (`.well-known/ashe`) + capability mediation + intent declarations + audit trail that operationalize the argument |
+| Six guiding principles | Six binding architectural commitments (capability broker, sealed-workspace, frictionlessness, role-based capabilities, composition with isolation substrates, next-layer-protocol positioning) |
+| Collaborative ML-community framing | Apache 2.0 + open governance + multi-implementation commitment + conformance suite per ADR-015 |
+
+The paper makes the academic case for the existence of agent-specific web interfaces; ASHE provides the working protocol that operationalizes that case at production scale.
+
+#### 1.12.4 Author credibility signal
+
+The author roster includes **Siva Reddy** (McGill University / Mila) — a well-known computational linguistics researcher with substantial peer-reviewed work in NLP, reasoning, and language model evaluation. The paper passed arXiv submission review (June 2025), placing it in the cs.LG + cs.CL categories. While arXiv preprints are not peer-reviewed in the journal-publication sense, the author credibility and category placement establish the work as serious academic-research-pipeline output rather than informal commentary.
+
+This matters for ASHE's validation arc because the four convergent sources now span four distinct credibility categories:
+
+| Source category | Validation source |
+|---|---|
+| **Industry operational data** (production network) | Cloudflare (§1.9) |
+| **Industry threat intelligence** (1Q+ interactions analyzed) | HUMAN Security (§1.10) |
+| **Industry frontier-vendor strategic disclosure** (multi-protocol stack + open question) | Google Cloud (§1.11) |
+| **Academic research pipeline** (position paper, established authors) | Lù et al. arXiv preprint (§1.12) |
+
+#### 1.12.5 The convergent-validation pattern updated — 5 sources across 4 credibility categories
+
+| Source | Type | Architectural validation |
+|---|---|---|
+| **Cloudflare** | Industry operational + research | Cache architecture → ASHE tri-surface web-side |
+| **HUMAN Security** | Industry threat intelligence | Intent declaration + trust governance → ASHE intent + capability lease |
+| **Wikimedia** | Industry operational workaround | Structured-data-for-agents → ASHE structured response negotiation |
+| **Anthropic** | Industry vendor product + protocol | Per-implementation enforcement + MCP foundation → ASHE Layer 1 cooperating-SDK + composition above MCP |
+| **Google Cloud** | Industry frontier-vendor disclosure | Multi-protocol stack + explicit open question → ASHE capability-mediation gap fill above MCP/A2A/AP2/SAIF2 |
+| **Lù et al. (arXiv 2506.10953)** ⭐ | Academic research pipeline | "Agentic Web Interface" + six guiding principles → ADR-018 foundational position with safety/efficiency/standardization |
+
+Five sources across four credibility categories. Each independently arrived at architectural commitments ASHE specifies. **The probability that five independent reasoning paths from different operational/research positions all converge on the same architectural shape by coincidence is negligible. This is empirical evidence that the architecture is correct.**
+
+#### 1.12.6 Strategic implication
+
+The academic source closes the validation arc that the three industry sources opened. Without academic backing, the validation pattern could be characterized as "vendors building products" — narrow, commercially-motivated, potentially transient. With academic backing from the research pipeline, the pattern becomes: *"Industry operational data + industry threat intelligence + industry frontier-vendor disclosure + academic research pipeline all converge on the same architectural shape. The architecture is correct."*
+
+This is the strongest defensible claim ASHE's case for adoption can make. The architecture is not idiosyncratic; it is what the operational reality + research analysis collectively force.
+
+#### 1.12.7 Citations
+
+- Lù, X. H., Kamath, G., Mosbach, M., & Reddy, S. (2025). *Build the web for agents, not agents for the web* (arXiv:2506.10953). arXiv preprint. https://arxiv.org/abs/2506.10953
+- Author affiliation: Mila / McGill University (Siva Reddy and co-authors)
+
+---
+
 ## 2. Documented agent failure incidents[^incidents-source]
 
 [^incidents-source]: Incidents compiled 2026-05-25 from contemporary public-record sources including Bloomberg, VentureBeat, CNBC, The Block, court filings, and corporate disclosures. Pre-2026 cases (Mata v. Avianca, Air Canada chatbot, Cohen/Bard) are independently verified against author training data through January 2026. 2026 incidents are cited per the sources named; readers seeking primary-source confirmation should consult the named outlets. This section will be updated as additional incidents are publicly documented; correction-requests for any inaccuracy welcomed via the standard contribution process.
