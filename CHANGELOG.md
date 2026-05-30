@@ -22,6 +22,10 @@ New companion artifact consolidating ASHE's "frictionless by mandate / TLS for t
 
 5. **Conformance budget** — a checkable per-property budget table; the one-line test: a routine action costs no round-trip, no token, no human attention — and the audit record still exists.
 
+6. **The four hard invariants** — strict statement of weightlessness as absolutes: *no delay, no added bandwidth, no data alteration, no interference.* No-data-alteration is Floor-contractual ([ADR-007](decisions/ADR-007-interception-chain-pattern.md): idempotent, no dispatch-state mutation — pass/deny, never rewrite); no-interference-with-surfaces is Floor-constructional ([ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md) additive + [ADR-009](decisions/ADR-009-deployment-profiles.md) graceful degradation). The honest tension is named: *active enforcement is interference by definition* — literal-zero holds only for pre-authorized actions and structurally-bounded denials, with remaining enforcement weight concentrated at the rare Tier C boundary where interference is the intended function.
+
+7. **Structural vs procedural mediation** — the path to literal zero on delay/bandwidth is making the capability boundary *structural* (object-capability: an unforgeable reference you were never handed is an absence, not a denied check) rather than *procedural* (a check that runs). True-zero is a Layer 3/4 property per [ADR-014](decisions/ADR-014-phased-enforcement-model.md) — where the boundary stops being a step on the path and becomes part of the system's shape, enforced by the substrate's existing mechanism (type system / OS capability / hardware root) at no added cost.
+
 **Status**: Companion design note (v0.x), consistent with the existing artifact bundle. No ADR superseded; cross-references [ADR-007](decisions/ADR-007-interception-chain-pattern.md), [ADR-009](decisions/ADR-009-deployment-profiles.md), [ADR-012](decisions/ADR-012-wire-format-grpc-protobuf-with-projections.md), [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md), [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md).
 
 ---

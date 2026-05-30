@@ -33,6 +33,45 @@ The thesis of this document: **weightlessness is achieved when every row's stead
 
 ---
 
+## The four hard invariants
+
+Amortized-small is not zero. The strict statement of weightlessness — the bar an ASHE deployment must clear on the steady-state path — is four invariants stated as absolutes:
+
+| Invariant | Meaning | Status |
+|---|---|---|
+| **No delay** | Zero added latency on the routine action path | Target — via pre-authorization / structural boundary (below) |
+| **No bandwidth** | Zero added bytes on the wire for a routine action | Target — held capability carries the grant; nothing re-sent |
+| **No data alteration** | ASHE never transforms a payload or mutates application state — it is *pass/deny*, never *rewrite* | **Floor (contractual)** — [ADR-007](decisions/ADR-007-interception-chain-pattern.md) mandates idempotent, no dispatch-state mutation |
+| **No interference** | ASHE does not perturb the application's normal operation or the human surface | **Floor (constructional)** — additive dual-surface ([ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md)); graceful degradation never *fails* the system ([ADR-009](decisions/ADR-009-deployment-profiles.md)) |
+
+Two of the four are already guaranteed, not aspired to. **No data alteration** is contractual: the interceptor contract is idempotent with no dispatch-state mutation — ASHE decides, it does not rewrite, so a passing action arrives at its handler byte-identical to an unmediated one. **No interference with existing surfaces** is constructional: ASHE rides alongside the HTML/human surface via ALPN on port 443 and never touches it, and a thin profile that lacks a tier degrades to a more conservative decision rather than erroring — it cannot take the host down.
+
+The other two — **no delay, no bandwidth** — are where the real engineering lives, and they expose a tension that must be named honestly.
+
+### The honest tension: enforcement *is* interference
+
+**Active enforcement is interference by definition.** The instant ASHE *blocks* an action it has interfered, and if it blocks synchronously it has also delayed. You cannot simultaneously have "veto this specific action in-band" and "zero delay / zero interference on that same action" — it is a contradiction, not an engineering gap. So literal-zero is not claimable for *every* action. It is claimable, precisely, for two categories — and weightlessness is the discipline of making those two categories cover ~98% of all actions:
+
+1. **Pre-authorized actions.** The capability is already held (issued at the boundary). At action time there is *nothing to check* — the decision was made before the action existed — so there is no step to add latency and no byte to send. The weight was paid at issuance and amortized away.
+2. **Structurally-bounded denials.** The action was never *expressible*. (Next section.)
+
+The enforcement weight that genuinely remains is concentrated at the rare Tier C boundary (~2% — production deploys, secret access, escalation, irreversible destruction), where interference is the *intended function* and a few milliseconds against a deploy is invisible. Weightlessness is honest about *which* actions are truly zero and *where* the weight is deliberately spent — it does not pretend enforcement is free where enforcement is the point.
+
+### Structural, not procedural — the path to literal zero
+
+A **procedural** check is a step that *runs*: it can be made tiny, local, amortized — but never literally zero, because something executes on the path. A **structural** boundary is part of the system's *shape*: an unforgeable reference you were never handed is not a "denied check," it is an *absence*.
+
+This is the object-capability property at the root of ASHE's 50-year lineage ([VISION §1](VISION.md)): *ambient authority is eliminated by construction — nothing has authority it was not given.* A JPEG parser that does not hold the SSH-key capability pays **no runtime check** to be denied SSH keys — it structurally has no way to *name* them. The substrate already enforces this as its normal operation — the type system at Layer 2, the OS capability/MMU at Layer 3, the hardware root at Layer 4 ([ADR-014](decisions/ADR-014-phased-enforcement-model.md)) — so ASHE adds **no step to the path**:
+
+- **no delay** — there is no check to run; the boundary is the substrate's existing mechanism
+- **no bandwidth** — there is no message to send; the reference is held or it is absent
+- **no data alteration** — there is nothing in the path to alter
+- **no interference** — the action proceeds exactly as written, or was never expressible to begin with
+
+The cost was paid twice, both off the hot path: once at **issuance** (a boundary event) and once at **construction** (the system shaped so authority is held-or-absent). This is why the four invariants are *reachable* rather than wishful — but only as the enforcement layer deepens. At Layer 1 (cooperating SDK) mediation is procedural and pays a small, sub-millisecond, amortized cost (§1); literal zero on delay and bandwidth is a **Layer 3/4 property**, where the boundary stops being a step and becomes part of the shape. The trajectory toward true-zero is the [ADR-014](decisions/ADR-014-phased-enforcement-model.md) trajectory.
+
+---
+
 ## 1. Latency — the hot-path budget
 
 The interception contract in [ADR-007](decisions/ADR-007-interception-chain-pattern.md) already fixes the hard number: any pre-dispatch interceptor must meet **<5ms p99 latency, deterministic, idempotent, no dispatch-state mutation.** That is the ceiling. Weightlessness is about getting the *typical* case far below it.
