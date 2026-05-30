@@ -4,6 +4,25 @@ Reverse-chronological record of architectural decisions and significant artifact
 
 ---
 
+## [2026-05-30] **ADR-020 — weightlessness is conformant only under proper application**
+
+Promotes the "proper application — the resolving discipline" principle from a WEIGHTLESS.md design note to a **binding conformance gate**. "Weightless" becomes a falsifiable four-part predicate, not an adjective.
+
+**The gate**: an ASHE implementation MAY claim the four hard invariants (no delay / no bandwidth / no data alteration / no interference) on the steady-state path **only if** it satisfies all four facets of proper application, conjunctively:
+
+- **What** — authority modeled as object-capability (*held or absent*); an unauthorized action MUST be *unnameable*, not checked-and-denied.
+- **How** — the routine-path boundary MUST be **structural** (the substrate's own mechanism per [ADR-014](decisions/ADR-014-phased-enforcement-model.md) Layer 2/3/4), not a procedural check ASHE runs as an added step.
+- **When** — the boundary MUST be established **at construction** (wall-up-first, `ashe workspace init` as step 1 per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md)), not bolted on as a front gate.
+- **Where** — literal-zero applied to the ~98% routine path; deliberate weight concentrated at the ~2% Tier C boundary. Uniform enforcement fails this facet.
+
+**What it forbids**: claiming "weightless" for a fast-but-real per-action check (a fast check is still a check), a permission-flag/identity model, a retrofitted gate, or uniform enforcement of the routine path.
+
+**Layer-1 caveat**: cooperating-SDK implementations are not disqualified — they MUST disclose, per [ADR-015](decisions/ADR-015-validation-methodology-and-tiered-claims.md) evidence grades, that no-delay/no-bandwidth are **amortized-small (Layer 1)** rather than **literal-zero (Layer 3/4 structural property)**. The gate distinguishes *honest amortized-small* from *false literal-zero*.
+
+**Status**: Accepted. `Builds on` ADR-007, ADR-009, ADR-014, ADR-015, ADR-017. No ADR superseded. INDEX.md and WEIGHTLESS.md cross-reference it.
+
+---
+
 ## [2026-05-30] **WEIGHTLESS.md — the weightlessness design principle**
 
 New companion artifact consolidating ASHE's "frictionless by mandate / TLS for the agent layer" promise into a single named engineering property and budget.

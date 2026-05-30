@@ -74,7 +74,7 @@ The cost was paid twice, both off the hot path: once at **issuance** (a boundary
 
 ## Proper application — the resolving discipline
 
-Weightlessness is difficult to *resolve* because it is not a mechanism you install — it is **the default state of a system whose authority boundaries were applied correctly, and it is forfeited the instant they are applied incorrectly.** A misapplied ASHE is not a lighter middleware; it is just middleware. The property holds, or it doesn't, depending entirely on how it is applied. "Properly apply" is four facets of one discipline — all four required together; drop any one and the property collapses:
+Weightlessness is difficult to *resolve* because it is not a mechanism you install — it is **the default state of a system whose authority boundaries were applied correctly, and it is forfeited the instant they are applied incorrectly.** A misapplied ASHE is not a lighter middleware; it is just middleware. The property holds, or it doesn't, depending entirely on how it is applied. This is a binding conformance gate, not advice: [ADR-020](decisions/ADR-020-weightlessness-proper-application-conformance.md) makes "weightless" a four-part predicate an implementation may claim *only* under proper application. "Properly apply" is four facets of one discipline — all four required together; drop any one and the property collapses:
 
 | Facet | Proper application (weightless) | Improper application (collapses to middleware) |
 |---|---|---|

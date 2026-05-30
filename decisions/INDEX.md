@@ -39,6 +39,7 @@ Pattern: Michael Nygard's ADR template.
 | **017** | [Sealed workspace as foundational development pattern](ADR-017-sealed-workspace-foundational-dev-pattern.md) | Accepted | 2026-05-26 | Reference arch, protocol |
 | **018** | [`.well-known/ashe` web-side interaction-point convention](ADR-018-well-known-ashe-web-side-interaction-point.md) | Accepted | 2026-05-27 | Protocol, reference arch |
 | **019** | [Execution-class distinction — provider-call / agent-worker / occupant](ADR-019-execution-class-distinction.md) | **Proposed** (pending working-code validation via CONSTRUCT-CLAUDE-OCCUPANCY-DESIGN-v0) | 2026-05-27 | Protocol, reference arch |
+| **020** | [Weightlessness is conformant only under proper application](ADR-020-weightlessness-proper-application-conformance.md) | Accepted | 2026-05-30 | Protocol, reference arch, paradigm |
 
 ---
 
