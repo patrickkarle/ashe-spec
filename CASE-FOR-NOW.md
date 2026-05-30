@@ -388,6 +388,99 @@ The HUMAN data further validates [§1.8](#18-the-compound-benefit-case--the-poli
 
 ---
 
+### 1.11 External validation — Google Cloud AI Agent Trends 2026
+
+Google Cloud's *AI Agent Trends 2026* report (synthesizing internal Google Cloud + Google DeepMind interviews with AI leaders, customer case studies, and *The ROI of AI 2025* global survey of 3,466 enterprise decision makers) provides the third independent external validation for ASHE's architectural commitments. Where §1.9 validated ASHE's tri-surface web-side architecture (Cloudflare) and §1.10 validated ASHE's intent-declaration + trust-governance architecture (HUMAN), §1.11 validates **the protocol-composition layering** that ADR-018 and the §7 landscape framing already specify — Google has published multiple open protocols at different layers (A2A, AP2, MCP support, Secure AI Framework 2.0), and the gap they leave open is precisely the capability-mediation layer ASHE fills.
+
+#### 1.11.1 The empirical data (Google Cloud, *ROI of AI 2025*, n=3,466 enterprise decision-makers)
+
+- **52% of executives in gen AI-using organizations have AI agents in production** (deployed across multiple use cases)
+- **88% of agentic AI early adopters seeing positive ROI** on at least one gen AI use case
+- **82% of SOC analysts concerned about missing real threats** due to alert fatigue (Forrester for Google, 2025)
+- **Use-case distribution**: 49% customer service · 46% marketing/security operations · 45% tech support · 43% product innovation/research
+- **Skills gap**: half-life of a professional skill now 4 years (2 years in tech). The "agent orchestrator" / "Chief of Staff for AI" role *doesn't yet exist in the market* — explicitly named by Google as the upcoming hiring gap
+
+#### 1.11.2 Google's framing of the agent payment security challenge
+
+The single most ASHE-aligned passage in the Google Cloud report, from the agentic-commerce section:
+
+> *"Today's payment systems assume a human is directly initiating the purchase. This poses a fundamental challenge for security: What happens when a non-human entity (the agent) is making the final transaction decision, with pre-approval from a human?"*
+>
+> *"An agent initiating a payment with a human's oversight and guidance under a new framework like Google Agent Payments Protocol (AP2) breaks this assumption. This raises critical questions about how to prove user-given authority for a purchase, how a merchant can be sure an agent's request is accurate and not a hallucination, and who is ultimately accountable in case of fraud."*
+>
+> — Google Cloud, *AI Agent Trends 2026*
+
+Google is naming three concrete unsolved problems:
+
+| Google's question | ASHE's answer |
+|---|---|
+| "How to prove user-given authority for a purchase" | Capability lease + provenance chain per [ADR-014](decisions/ADR-014-phased-enforcement-model.md) phased enforcement; cryptographically-attested authority delegation per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md) |
+| "How a merchant can be sure an agent's request is accurate and not a hallucination" | Intent declaration at protocol boundary per [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md); structured request shapes that bind agent assertions to verifiable scope |
+| "Who is ultimately accountable in case of fraud" | Audit trail with session lineage per [ADR-013](decisions/ADR-013-multi-service-architecture.md) AuditService; per-class accountability shape per [ADR-019](decisions/ADR-019-execution-class-distinction.md) execution-class distinction |
+
+Google has the open question. ASHE has the architectural answer.
+
+#### 1.11.3 Google's open-protocol stack and ASHE's complementary position
+
+Google Cloud's 2026 trends report references *four* open protocol frameworks for the agentic enterprise:
+
+| Layer | Protocol | What it solves |
+|---|---|---|
+| **Foundation** | **MCP** (Model Context Protocol, Anthropic) | Standardized two-way connection for AI applications to data sources and tools |
+| **Agent-to-agent** | **A2A** (Agent2Agent protocol, Google open standard) | Seamless integration and orchestration between AI agents across different developers, frameworks, and organizations (Salesforce partnership) |
+| **Payments** | **AP2** (Agent Payments Protocol, Google open framework) | Secure, open, scalable solution for agentic commerce (PayPal partnership) |
+| **Security framework** | **Secure AI Framework 2.0** (Google) | Addressing rapidly emerging risks posed by autonomous AI agents |
+| **Capability mediation + intent + audit** ⭐ | ⭐ **The gap ASHE fills** ⭐ | Cross-vendor capability lease, intent declaration, audit trail, accountability — composing above MCP/A2A/AP2/SAIF2 |
+
+This is the §7 landscape framing made concrete by Google's own published protocol catalog. The foundational protocols exist (MCP/A2A/AP2/SAIF2); the capability-mediation layer that operationalizes "how to prove user-given authority + how to verify request accuracy + who is accountable" is the structural gap ASHE was built to fill.
+
+**Critically**: Google is shipping individual proprietary-but-open protocols at each layer. ASHE is the *cross-vendor protocol that lets MCP, A2A, AP2, and capability-mediation primitives compose into a unified stack across vendors* — without requiring any party to give up their existing protocol commitments.
+
+#### 1.11.4 The intent-based computing framing convergence
+
+Google's own framing of the shift driving agentic enterprise adoption, from the "Agents for every employee" trend:
+
+> *"This change stems from a behavioral shift in the human-computer interface, moving from instruction-based computing (e.g., analyzing a spreadsheet, developing code) to **intent-based computing**. In 2026, employees will be increasingly able to state a desired outcome, and the computer — using LLMs and agents — determines how to deliver it."*
+
+And the load-bearing definition from Sundar Pichai (Google I/O May 2025 keynote, quoted in the report):
+
+> *"Agents are systems that combine the intelligence of advanced AI models with access to tools so they can take actions on your behalf, **under your control**."*
+
+The phrase "under your control" is the load-bearing commitment. Google identifies it; ASHE operationalizes it via capability lease + intent declaration + bounded outcomes (per [§1.7](#17-bounded-outcomes-vs-censored-behavior--the-structural-inversion)). The bounded-outcomes-≠-censored-behavior commitment is exactly what makes Google's "under your control" claim structurally credible at protocol scale.
+
+#### 1.11.5 The convergent-validation pattern updated — 4 vendors, 4 dimensions
+
+The §1.10.5 vendor convergence pattern now extends with Google Cloud as the fourth frontier-grade independent validation:
+
+| Vendor | Published vendor-specific approach | ASHE protocol-tier dimension validated |
+|---|---|---|
+| **Cloudflare** | "Separate cache layer for AI traffic with task-type routing"; AI Index, Markdown for Agents, AI Crawl Control, Pay Per Crawl, block-by-default | Tri-surface architecture; ADR-018 web-side convention; intent declarations matching "task-type" cache handling |
+| **HUMAN Security** | AgenticTrust product: intent detection + trust verification + agent governance | Intent-declaration architecture; capability-lease + scope-bounded authority; cross-surface audit |
+| **Wikimedia** | Kaggle-distributed structured JSON datasets for AI training (bandwidth workaround) | Structured-response negotiation at protocol boundary |
+| **Anthropic** | Claude Code permission system (6 modes, sandboxed Bash, dev container); MCP foundational layer | Per-implementation enforcement primitives at Layer 1-2; ADR-017 sealed-workspace precedent; MCP as foundational composition layer |
+| **Google Cloud** ⭐ | Multi-protocol stack: A2A (open agent-to-agent), AP2 (open payment protocol), MCP support, Secure AI Framework 2.0; explicitly-named open question "how to prove user-given authority + verify request accuracy + assign accountability" | Capability lease + provenance + intent declaration + audit trail per ADRs 013/014/017/018/019 — the layer above Google's published stack that operationalizes "under your control" at protocol scale |
+
+Four frontier-grade vendors with five different empirical operational pressures (cache economics, fraud detection at quadrillion-interaction scale, bandwidth costs, dev-environment safety, agentic-commerce accountability) converge on architectural primitives ASHE specifies at the protocol layer. Each vendor solves a *subset* with proprietary implementation. ASHE is the cross-vendor protocol that lets the subsets compose without N×M integration cost.
+
+#### 1.11.6 Strategic implication
+
+Google's explicit articulation of the agentic-commerce accountability problem — *"how to prove user-given authority for a purchase, how a merchant can be sure an agent's request is accurate and not a hallucination, and who is ultimately accountable in case of fraud"* — is unusually load-bearing for ASHE's case because Google is the actor most likely to *itself* solve the gap proprietarily. That they have named it as an open question in their 2026 trends report rather than announcing a vendor-specific answer establishes two things:
+
+1. **The architectural gap is real** — Google's engineering organization, with massive resources and incentive to solve agentic-commerce problems, has named it publicly as unsolved
+2. **The standardization window is open** — Google has shipped foundational protocols (A2A, AP2, MCP support) but explicitly identifies the gap above those protocols as a *question*, not an announcement
+
+ASHE's positioning relative to Google's stack is structurally sound: ASHE composes *above* MCP + A2A + AP2 + Secure AI Framework 2.0, providing the capability-mediation + intent-declaration + audit layer that Google's open question identifies. Adoption requires no displacement of Google's existing protocol commitments — only composition above them.
+
+This is the strongest single piece of evidence in the entire CASE-FOR-NOW corpus that the *cross-vendor* protocol layer is structurally adjacent to what frontier-grade vendors are individually shipping, and the gap ASHE fills is *named explicitly* by the largest such vendor.
+
+#### 1.11.7 Citations
+
+- Google Cloud. (2026). *AI Agent Trends 2026: Five shifts that will redefine roles, workflows, and business value in 2026*. (Synthesizing Google Cloud + Google DeepMind interviews with AI leaders, customer case studies, and *The ROI of AI 2025* survey of n=3,466 enterprise decision makers.)
+- Pichai, S. (2025, May). Keynote, Google I/O 2025.
+- Forrester Consulting on behalf of Google. (2025). *Threat Intelligence Benchmark: Stop Reacting; Start Anticipating*.
+
+---
+
 ## 2. Documented agent failure incidents[^incidents-source]
 
 [^incidents-source]: Incidents compiled 2026-05-25 from contemporary public-record sources including Bloomberg, VentureBeat, CNBC, The Block, court filings, and corporate disclosures. Pre-2026 cases (Mata v. Avianca, Air Canada chatbot, Cohen/Bard) are independently verified against author training data through January 2026. 2026 incidents are cited per the sources named; readers seeking primary-source confirmation should consult the named outlets. This section will be updated as additional incidents are publicly documented; correction-requests for any inaccuracy welcomed via the standard contribution process.
