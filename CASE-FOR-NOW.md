@@ -561,6 +561,97 @@ This is the strongest defensible claim ASHE's case for adoption can make. The ar
 
 ---
 
+### 1.13 External validation — Business strategy (HBR) + operator practice (Siteimprove)
+
+Two additional 2025-2026 sources extend the convergent-validation arc into the executive-business-strategy and operator-practice credibility categories: Kenny & Pogrebna (2026) in *Harvard Business Review* speaking to boardroom-level strategy; Jeske (2025) on the Siteimprove operator blog speaking to site-operator-level decision frameworks. Both validate dimensions of ASHE adjacent to but distinct from the engineering, threat-intelligence, strategic-vendor-disclosure, and academic-research validation already in §1.9-§1.12.
+
+#### 1.13.1 HBR — *"In an AI-mediated marketplace, the first customer is the algorithm"*
+
+Kenny & Pogrebna, *LLMs Are Overtaking Search. Here's How to Adjust Your Online Presence* (Harvard Business Review, 2026-03-06), names three structural shifts businesses must adjust to:
+
+| Shift | HBR framing |
+|---|---|
+| **1. AI Recommendations becoming more influential** | Trust shifting from human sources (friends, family, salespeople, influencers) to algorithmic ones (primarily LLMs); consumers shifting from "push of advertising" to "pull of AI recommendations" |
+| **2. SEO and website design mattering less** | Customer exploration stage collapsing; users receive synthesized answers rather than ranked link lists; "branded touchpoints, where organizations once shaped competitive advantage, largely disappear" |
+| **3. Marketing has a new audience** | *"Marketing is no longer solely about influencing human perception. In an AI-mediated marketplace, the first customer is the algorithm."* — Michael, Chief Growth Officer, Henry Smith (publishing company case study) |
+
+Quantitative impact reported in the article:
+
+- **Click-through rates drop 47%** when AI summaries appear in search results (8% with AI vs 15% without; one cited study)
+- **Some publishers report click-through declines as high as 89%** as exploratory stages disintegrate
+- **HSure (health insurance case study)**: *"information that previously required 15 to 20 website visits across the customer research journey is now delivered in a single LLM-generated response"*
+- **Product Insight (review/affiliate company)**: historically-highest-value pages have seen **67% traffic decline**; Google AI Overviews now appear for **78% of their core product queries**
+- One European retailer ("Nordpay") reallocated advertising spend: *"We've reduced our advertising spend by 11% while still producing more marketing output. We've cut agency spend by approximately 25%, shifting work in-house with gen AI."*
+
+#### 1.13.2 HBR's content-restructuring recommendation = ASHE-adjacent provenance + structured data
+
+HBR's Henry Smith case study describes the recommended response to the algorithm-as-first-customer shift, via CGO Michael:
+
+> *"We now structure content so machines can parse authority and expertise. We've invested in schema (a standardized vocabulary that labels content in a machine-readable way), increased authorship signals (indicating who created the content and why they are qualified to do so), and provided clean data architecture (how content is structured, organized, and coded so that algorithms can easily interpret it). And we've accelerated efforts to build direct audience relationships through newsletters and branded search."*
+
+This is the *boardroom-level articulation* of structured-data-for-agents + provenance + machine-readable content — the same problem space ASHE addresses at the protocol layer:
+
+| HBR/Henry Smith recommendation | ASHE protocol-tier primitive |
+|---|---|
+| "Schema (standardized vocabulary that labels content in a machine-readable way)" | Structured response surfaces per [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md) `.well-known/ashe` convention |
+| "Authorship signals (who created the content and why they are qualified)" | Provenance-by-construction (ADR-016 forthcoming); per-class accountability per [ADR-019](decisions/ADR-019-execution-class-distinction.md) |
+| "Clean data architecture (how content is structured, organized, and coded so algorithms can easily interpret)" | Capability descriptor grammar per [ADR-003](decisions/ADR-003-invariant-language.md); wire format per [ADR-012](decisions/ADR-012-wire-format-grpc-protobuf-with-projections.md) |
+| "Direct audience relationships" (escape from algorithm-mediated discovery) | Identity + trust delegation per [ADR-002](decisions/ADR-002-oidc-identity.md); cross-vendor identity coordination |
+
+HBR concludes:
+
+> *"As answers replace links and synthesis replaces exploration, visibility is no longer earned through clicks but through a branded presence inside AI systems. The winners in this new AI-dominated landscape will be those who treat AI not as a channel to optimize, but as an audience to influence."*
+
+The strategic frame "AI not as channel but as audience" is precisely the architectural commitment ADR-018 codifies — agent-side surfaces must be designed as first-class, distinct from human-browsing surfaces. HBR makes the case to boardrooms; ASHE provides the cross-vendor protocol implementation.
+
+#### 1.13.3 Siteimprove — operator-level decision framework for LLM traffic
+
+Jeske, *Should We Prioritize LLM Traffic? Start by Valuing It* (Siteimprove blog, updated 2025-10-10), provides the operator-floor counterpart to HBR's boardroom analysis: site operators are already making explicit go/no-go decisions about LLM traffic based on quantitative measurement frameworks.
+
+The article defines four LLM-traffic categories operators must distinguish: **attributable clicks** (direct human visits from answer engines), **assisted influence** (user journeys initially exposed via LLM answers that convert later), **zero-click exposure** (brand citations in answers without generating clicks), and **excluded non-human fetches** (filtered to maintain cohort integrity).
+
+Operators are deploying explicit 28-day decision thresholds:
+
+| Decision | Threshold |
+|---|---|
+| **Green (Prioritize)** | LLM volume ≥2% of organic sessions AND downstream lift ≥+15% to pricing/demo pages AND readiness metrics trending positively |
+| **Yellow (Monitor)** | Volume between 0.5–2% OR downstream lift between 0–15% OR mixed readiness signals |
+| **Red (Deprioritize)** | Volume <0.5% AND downstream lift ≤0% OR blocked readiness factors |
+
+The operator-pragmatist framing matters for ASHE's case because **explicit operator-level decisioning about agent traffic is empirically present in the market today**. Site operators are not waiting for protocols — they are already deploying ad-hoc measurement, prioritization, and content-restructuring frameworks. Each operator deploys these proprietarily; ASHE proposes the cross-vendor protocol that lets these decisions compose without per-operator reinvention.
+
+Siteimprove operates *upstream* of ASHE's primitives — Siteimprove answers "should we serve LLM traffic?"; ASHE answers "how do we mediate it once we serve?" The two are complementary at different abstraction layers. Both confirm the architectural premise that agent-server interaction requires structural governance frameworks.
+
+#### 1.13.4 The convergent-validation pattern updated — 7 sources across 5 credibility categories
+
+Adding HBR + Siteimprove to the §1.12.5 pattern:
+
+| Source | Credibility category | Architectural validation |
+|---|---|---|
+| **Cloudflare** | Industry operational + research | Cache architecture → ASHE tri-surface web-side |
+| **HUMAN Security** | Industry threat intelligence | Intent declaration + trust governance → ASHE intent + capability lease |
+| **Wikimedia** | Industry operational workaround | Structured-data-for-agents → ASHE structured response negotiation |
+| **Anthropic** | Industry vendor product + protocol | Per-implementation enforcement + MCP foundation → ASHE Layer 1 + composition above MCP |
+| **Google Cloud** | Industry frontier-vendor disclosure | Multi-protocol stack + explicit open question → ASHE capability-mediation gap fill |
+| **Lù et al. (arXiv 2506.10953)** | Academic research pipeline | "Agentic Web Interface" → ADR-018 foundational position |
+| **Kenny & Pogrebna (HBR 2026)** ⭐ | Executive business strategy | "First customer is the algorithm"; schema + authorship + clean data architecture → ASHE structured response + provenance + cross-vendor protocol |
+| **Jeske (Siteimprove 2025)** ⭐ | Operator-practice decisioning | Green/Yellow/Red thresholds; LLM traffic categorization → empirical validation that operator-level governance frameworks are already deployed (ad-hoc) at site level |
+
+Seven sources across five credibility categories. Every layer — engineering operations, threat intelligence, vendor-strategic disclosure, academic research, executive business strategy, operator-floor decisioning — independently arrives at architectural primitives ASHE specifies. The convergence is *over-determined*; the architecture is what the entire stack of stakeholders is independently reaching for.
+
+#### 1.13.5 Strategic implication — boardroom-to-operator full-stack validation
+
+The HBR + Siteimprove pair completes a structural arc: ASHE's case is now validated from **boardroom strategy** (HBR — "first customer is the algorithm" demanding new content architecture) down through **operator practice** (Siteimprove — explicit Green/Yellow/Red thresholds for LLM traffic decisioning), with engineering, threat-intelligence, strategic-vendor, and academic validation between. **Every credibility category in the stakeholder hierarchy independently validates the architectural commitments ASHE published.**
+
+For a frontier-AI hiring conversation, this is the difference between *"interesting protocol idea"* and *"the architecture that the operational reality + research + business strategy + operator decisioning + academic position all collectively force"*. The §1.12 closing claim — *"the architecture is what the operational reality forces, not a personal preference"* — is now defensible from seven distinct vantage points.
+
+#### 1.13.6 Citations
+
+- Kenny, G., & Pogrebna, G. (2026, March 6). *LLMs Are Overtaking Search. Here's How to Adjust Your Online Presence*. Harvard Business Review. https://hbr.org/2026/03/llms-are-overtaking-search-heres-how-to-adjust-your-online-presence
+- Jeske, S. (2025, October 10, updated). *Should We Prioritize LLM Traffic? Start by Valuing It*. Siteimprove Blog. https://www.siteimprove.com/blog/should-we-prioritize-llm-traffic/
+
+---
+
 ## 2. Documented agent failure incidents[^incidents-source]
 
 [^incidents-source]: Incidents compiled 2026-05-25 from contemporary public-record sources including Bloomberg, VentureBeat, CNBC, The Block, court filings, and corporate disclosures. Pre-2026 cases (Mata v. Avianca, Air Canada chatbot, Cohen/Bard) are independently verified against author training data through January 2026. 2026 incidents are cited per the sources named; readers seeking primary-source confirmation should consult the named outlets. This section will be updated as additional incidents are publicly documented; correction-requests for any inaccuracy welcomed via the standard contribution process.
