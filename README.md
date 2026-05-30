@@ -41,6 +41,22 @@ The architectural thesis: **bounded outcomes ≠ censored behavior**. The model 
 
 ASHE was developed within [Continuum](https://phor.io), Phor's integrated environment for agentic composition. Phor is publishing the protocol openly because the architectural pattern it codifies — capability mediation between agents and software — should be a public cross-vendor standard, not a single-vendor advantage.
 
+## External validation (as of 2026-05-29)
+
+Within 48 hours of initial publication, seven independent sources across five credibility categories converged on architectural commitments ASHE specifies:
+
+| Source | Category | Validates |
+|---|---|---|
+| Cloudflare (Wildani & Ahmad, 2026; Zhang et al., ACM SoCC 2025) | Industry engineering operational | Tri-surface web-side cache architecture |
+| HUMAN Security (2026 report; 1+ quadrillion interactions) | Industry threat intelligence | Intent declaration + trust governance |
+| Google Cloud (AI Agent Trends 2026; n=3,466 enterprise survey) | Frontier-vendor strategic disclosure | Multi-protocol stack + capability-mediation gap explicitly named |
+| Lù et al. (arXiv:2506.10953) | Academic research pipeline | "Agentic Web Interface" foundational position |
+| Kenny & Pogrebna (HBR 2026) | Executive business strategy | "First customer is the algorithm" |
+| Jeske (Siteimprove 2025) | Operator-practice decisioning | Operator governance frameworks already deployed |
+| Wikimedia (Kaggle distribution workaround) | Industry operational | Structured-data-for-agents negotiation |
+
+Full primary-source evidence with quotes and citations: [CASE-FOR-NOW.md §1.9-§1.13](./CASE-FOR-NOW.md).
+
 ## Status
 
 Early protocol publication (v0.x). The artifacts here represent architectural commitments + decision discipline + a structural case for adoption — they are NOT a finalized specification ready for ratification. The published [validation methodology](./decisions/ADR-015-validation-methodology-and-tiered-claims.md) commits to publishing benchmarks + a conformance suite within 12 months of v1 reference implementation completion. Tiered claims discipline (Floor / Target / Stretch with evidence grades) is applied throughout.
