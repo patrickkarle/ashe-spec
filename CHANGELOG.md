@@ -4,6 +4,28 @@ Reverse-chronological record of architectural decisions and significant artifact
 
 ---
 
+## [2026-05-30] **WEIGHTLESS.md — the weightlessness design principle**
+
+New companion artifact consolidating ASHE's "frictionless by mandate / TLS for the agent layer" promise into a single named engineering property and budget.
+
+**Core principle**: weightlessness is the *placement* of cost, not its absence — *pay once at an amortizable boundary (handshake, intent declaration, lease issuance); make the steady-state per-action path a local check with no network callout, no model token, and no human prompt.* The same handshake-vs-symmetric-crypto split TLS uses, generalized from bytes to actions.
+
+**What it adds**:
+
+1. **Axes-of-weight table** — names every axis a protocol layer can be *felt* on (latency, wire/token, cognitive, footprint, model-layer, adoption) and maps each to the existing ASHE mechanism that drives it toward zero, with ADR anchors.
+
+2. **Hot-path budget** — promotes the [ADR-007](decisions/ADR-007-interception-chain-pattern.md) locally-validated capability token from "v1 optimization" to the steady-state default; separates the rare slow path (Tier C, broker callout) from the routine fast path (in-process validation, sub-millisecond).
+
+3. **Evidence grades** — weightlessness claims tiered Floor/Target/Stretch per [ADR-015](decisions/ADR-015-validation-methodology-and-tiered-claims.md); only the <5 ms p99 interceptor bound and the arXiv 2511.23281 structured-over-HTML result are Floor-grade.
+
+4. **Honest limits** — the Tier C friction floor, cold-start boundary cost, the revocation-vs-token-speed trade, and audit-write cost are named as irreducible; weightlessness is *over a session*, not *over a single isolated call*.
+
+5. **Conformance budget** — a checkable per-property budget table; the one-line test: a routine action costs no round-trip, no token, no human attention — and the audit record still exists.
+
+**Status**: Companion design note (v0.x), consistent with the existing artifact bundle. No ADR superseded; cross-references [ADR-007](decisions/ADR-007-interception-chain-pattern.md), [ADR-009](decisions/ADR-009-deployment-profiles.md), [ADR-012](decisions/ADR-012-wire-format-grpc-protobuf-with-projections.md), [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md), [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md).
+
+---
+
 ## [2026-05-28] **ADR-019 v0.2 — phor-scoped governance refinement**
 
 ADR-019 amended to v0.2 incorporating phor-scoped governance frame as a load-bearing architectural layer that mediates occupant authority.
