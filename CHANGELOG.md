@@ -19,6 +19,8 @@ Promotes the "proper application — the resolving discipline" principle from a 
 
 **Layer-1 caveat**: cooperating-SDK implementations are not disqualified — they MUST disclose, per [ADR-015](decisions/ADR-015-validation-methodology-and-tiered-claims.md) evidence grades, that no-delay/no-bandwidth are **amortized-small (Layer 1)** rather than **literal-zero (Layer 3/4 structural property)**. The gate distinguishes *honest amortized-small* from *false literal-zero*.
 
+**Conformance suite**: four test groups (W/H/N/R, one per facet), conjunctive — all four MUST pass. Group W tests unnameability + zero-ambient-authority; Group H tests no-added-step + byte-identity + layer-disclosure; Group N tests construction-order + no-front-gate (disabling ASHE must make guarded actions *unreachable*, not *ungated-but-reachable*); Group R tests path-classification + no-uniform-enforcement + friction-frequency. Results are graded per invariant (literal-zero vs amortized-small-disclosed), never binary-by-assertion.
+
 **Status**: Accepted. `Builds on` ADR-007, ADR-009, ADR-014, ADR-015, ADR-017. No ADR superseded. INDEX.md and WEIGHTLESS.md cross-reference it.
 
 ---

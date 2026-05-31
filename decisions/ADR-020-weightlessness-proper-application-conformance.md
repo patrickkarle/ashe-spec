@@ -95,6 +95,35 @@ A Layer 1 (cooperating SDK) implementation cannot make the routine-path boundary
 - ADR-015 — Validation methodology and tiered claims. The evidence-grade discipline this ADR invokes for the mandatory amortized-small-vs-literal-zero disclosure.
 - ADR-017 — Sealed workspace. Supplies the *when* facet (wall-up-first, `ashe workspace init` as step 1) and the migration path for retrofit; its frictionlessness mandate is the cognitive-axis instance of this ADR's general gate.
 
+## Conformance suite for the weightlessness gate
+
+A claim of weightlessness is verified by four test groups, one per facet (per [ADR-015](ADR-015-validation-methodology-and-tiered-claims.md) methodology). **All four groups MUST pass for the claim to be conformant** — they are conjunctive, mirroring the facets. Each group also records the layer at which the property holds, so the result is graded (literal-zero at Layer 3/4 vs amortized-small-disclosed at Layer 1), never binary-by-assertion.
+
+**Group W (what — object-capability primitive):**
+
+- **Unnameability test** — an actor lacking a capability MUST have no reference by which to invoke the guarded action; the test confirms the action is *absent from the actor's surface*, not present-and-rejected. A model that returns a denial decision for the unauthorized action *fails* this group (denial implies the action was nameable and evaluated).
+- **Zero-ambient-authority test** — enumerate every authority reachable by a freshly-constructed actor; it MUST equal exactly the explicitly-granted set, with no implicit/ambient authority recoverable via path traversal, absolute paths, subprocess, or reflection.
+- **Attenuation test** — a sub-actor's reachable authority MUST be a subset of the granting actor's (composes with ADR-017 cascade attenuation).
+
+**Group H (how — structural mechanism):**
+
+- **No-added-step test** — on the routine (Tier A/B) path, instrument the call site and confirm a passing action reaches its handler with **no ASHE-executed evaluation step interposed** at the claimed structural layer. The boundary MUST be the substrate's own mechanism (type system / OS capability / MMU / hardware root per [ADR-014](ADR-014-phased-enforcement-model.md)).
+- **Byte-identity test** — a passing routine action MUST arrive at its handler byte-identical to the unmediated baseline (composes with the ADR-007 no-data-alteration floor); confirms no rewrite/transform on the path.
+- **Layer-disclosure test** — if mediation on the routine path is procedural (Layer 1), the implementation MUST emit the amortized-small (not literal-zero) disclosure for no-delay/no-bandwidth. A literal-zero claim with a procedural routine-path check *fails* this group.
+
+**Group N (when — at construction):**
+
+- **Construction-order test** — confirm the perimeter is established *before* workspace contents are reachable: `ashe workspace init` (or equivalent) runs as step 1, and there is no window in which contents are accessible outside the exposed capability surface (composes with ADR-017 Commitment 1).
+- **No-front-gate test** — confirm the boundary is the system's *shape*, not a gate in front of an already-built system: removing the ASHE component MUST make the guarded actions *unreachable* (structural), not *ungated-but-reachable* (bolted-on). A configuration where disabling ASHE restores direct access *fails* this group.
+
+**Group R (where — concentrated scope):**
+
+- **Path-classification test** — confirm the implementation classifies actions into the routine path (~98%, Tier A/B) and the Tier C boundary (~2%), and that the two are enforced *differently*: literal-zero/structural on the former, deliberate weight on the latter.
+- **No-uniform-enforcement test** — confirm a routine Tier A action incurs no round-trip, no added token, and no human prompt, while a representative Tier C action (production deploy / secret access / escalation / irreversible destruction) does invoke the explicit boundary. An implementation that gates the 98% the same way as the 2% *fails* this group.
+- **Friction-frequency test** — over a representative workload, explicit-prompt frequency on the routine path MUST stay below the defined threshold (shares the ADR-017 Commitment 2 frictionlessness measurement).
+
+**Grading and disclosure**: the suite reports, per invariant and per facet, whether the property holds as **literal-zero (structural, Layer 3/4)** or **amortized-small (procedural, Layer 1, disclosed)**, per ADR-015 evidence grades. The two already-floored invariants — no data alteration (ADR-007) and no interference (ADR-009/ADR-018) — are asserted at every layer and re-checked here as regression guards (byte-identity in Group H; degradation-never-fails as a host-liveness check).
+
 ---
 
 **ADR-020 makes "weightless" a conformance predicate, not an adjective. An implementation may claim the four hard invariants only under proper application: the object-capability primitive (what), applied structurally (how), at construction (when), on the dominant path (where) — all four, conjunctively. Proper application *removes* the work; it does not accelerate it. A fast check is still a check, still weight; weightless means there is no check at all on the path that matters.**
