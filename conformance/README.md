@@ -23,6 +23,8 @@ conformance/
       lease.ts                            #   boundary-amortized standing authority
       tier.ts                             #   risk-tier classification (A/B routine, C boundary)
       mediation.ts                        #   structural interception point (ADR-007)
+      audit.ts                            #   tamper-evident audit-by-construction (hash chain)
+      intent.ts                           #   declare-once intent reconciliation (VISION §6)
     examples/structural-reference-adapter.ts  # correctly-applied SUT, built on protocol/
   tests/
     protocol/*.test.ts                    # unit tests for the primitives (always run)
@@ -49,7 +51,12 @@ unit tests and (via the adapter) by the weightlessness gate:
 - **`tier.ts`** — routine (A/B) vs the deliberate-weight Tier-C boundary.
 - **`mediation.ts`** — the interception point (ADR-007), structural: routine held actions pass
   through with no boundary step and byte-identical payload; an unheld capability is `UNNAMEABLE`,
-  never `DENIED`.
+  never `DENIED`. Optionally emits an audit record per decision.
+- **`audit.ts`** — append-only, SHA-256 hash-chained audit log (ADR-013 Audit service; ADR-016
+  provenance). `verify()` detects any reorder/edit/drop of a sealed record; the local append sits
+  off the action's critical path (not a round-trip).
+- **`intent.ts`** — declare-once intent reconciliation (VISION §6; ADR-017 C2). An in-scope,
+  unexpired action reconciles silently (no prompt); out-of-scope or expired escalates.
 
 ## The four groups (ADR-020)
 

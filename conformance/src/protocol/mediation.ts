@@ -11,6 +11,7 @@
  */
 import type { Actor } from "./actor.js";
 import type { TierRegistry } from "./tier.js";
+import type { AuditLog } from "./audit.js";
 
 export type Decision = "ALLOWED" | "UNNAMEABLE" | "DENIED";
 
@@ -28,21 +29,50 @@ export interface MediationResult {
   readonly payloadDelivered: Uint8Array;
 }
 
+export interface MediatorOptions {
+  /** Optional append-only audit log; every decision is recorded if present. The
+   *  record is a *local* append, off the action's critical path (WEIGHTLESS.md). */
+  readonly audit?: AuditLog;
+  /** Clock for audit timestamps; defaults to wall time. */
+  readonly now?: () => number;
+}
+
 export class Mediator {
-  constructor(private readonly tiers: TierRegistry) {}
+  private readonly audit?: AuditLog;
+  private readonly now: () => number;
+
+  constructor(
+    private readonly tiers: TierRegistry,
+    options: MediatorOptions = {},
+  ) {
+    this.audit = options.audit;
+    this.now = options.now ?? (() => Date.now());
+  }
 
   mediate(actor: Actor, action: Action): MediationResult {
-    // No reference → the action is not expressible. Absence, not a denied check.
+    const tier = this.tiers.classify(action.capability);
+
+    let result: MediationResult;
     if (!actor.canName(action.capability)) {
-      return { decision: "UNNAMEABLE", boundaryInvoked: false, payloadDelivered: action.payload };
-    }
-
-    if (this.tiers.classify(action.capability) === "C") {
+      // No reference → the action is not expressible. Absence, not a denied check.
+      result = { decision: "UNNAMEABLE", boundaryInvoked: false, payloadDelivered: action.payload };
+    } else if (tier === "C") {
       // The ~2% boundary: the explicit gate runs; interference is the point here.
-      return { decision: "ALLOWED", boundaryInvoked: true, payloadDelivered: action.payload };
+      result = { decision: "ALLOWED", boundaryInvoked: true, payloadDelivered: action.payload };
+    } else {
+      // Routine path: structural pass-through. No step added, payload untouched.
+      result = { decision: "ALLOWED", boundaryInvoked: false, payloadDelivered: action.payload };
     }
 
-    // Routine path: structural pass-through. No step added, payload untouched.
-    return { decision: "ALLOWED", boundaryInvoked: false, payloadDelivered: action.payload };
+    this.audit?.append({
+      subject: actor.id,
+      capability: action.capability,
+      tier,
+      decision: result.decision,
+      boundaryInvoked: result.boundaryInvoked,
+      at: this.now(),
+    });
+
+    return result;
   }
 }

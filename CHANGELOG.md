@@ -17,8 +17,10 @@ Two follow-ons to the executable conformance suite.
 - **`lease.ts`** — boundary-amortized standing authority with a TTL (WEIGHTLESS amortization; ADR-017 standing capabilities).
 - **`tier.ts`** — routine (A/B) vs the deliberate-weight Tier-C boundary.
 - **`mediation.ts`** — the interception point (ADR-007) applied structurally: routine held actions pass through with no boundary step and byte-identical payload; an unheld capability is `UNNAMEABLE`, never `DENIED`.
+- **`audit.ts`** — tamper-evident **audit-by-construction** (ADR-013 Audit service; ADR-016 provenance): an append-only, SHA-256 hash-chained log. `verify()` catches any reorder/edit/drop of a sealed record; the Mediator optionally emits one record per decision (including `UNNAMEABLE` attempts), as a *local* append off the critical path — not a round-trip.
+- **`intent.ts`** — declare-once **intent reconciliation** (VISION §6; ADR-017 C2): an in-scope, unexpired action reconciles silently (the frictionless routine path keeps accountability without re-approval); out-of-scope or expired escalates.
 
-14 protocol unit tests + 11 conformance assertions; `npm run test:example` → **25/25 green**, `tsc --noEmit` clean. `npm test` (no adapter) runs the 14 units and skips the 11 conformance groups. The protocol module is the seed of the reference implementation the ADRs describe; subsequent work grows it (intent declaration, audit, the validation graph).
+21 protocol unit tests + 11 conformance assertions; `npm run test:example` → **32/32 green**, `tsc --noEmit` clean. `npm test` (no adapter) runs the units and skips the conformance groups. The protocol module is the seed of the reference implementation the ADRs describe; subsequent work grows it (the validation graph, wire-format projections, the lease/revocation lifecycle).
 
 ---
 
