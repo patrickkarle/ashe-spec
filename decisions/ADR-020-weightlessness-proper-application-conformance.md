@@ -124,6 +124,8 @@ A claim of weightlessness is verified by four test groups, one per facet (per [A
 
 **Grading and disclosure**: the suite reports, per invariant and per facet, whether the property holds as **literal-zero (structural, Layer 3/4)** or **amortized-small (procedural, Layer 1, disclosed)**, per ADR-015 evidence grades. The two already-floored invariants — no data alteration (ADR-007) and no interference (ADR-009/ADR-018) — are asserted at every layer and re-checked here as regression guards (byte-identity in Group H; degradation-never-fails as a host-liveness check).
 
+**Runnable suite**: the four groups are implemented as an executable conformance scaffold at [`conformance/`](../conformance/) — a language-neutral test manifest (`src/manifest.ts`, keyed by the test ids above) plus a TypeScript/vitest realization. An implementation plugs in by implementing the `AsheConformanceAdapter` contract (`src/adapter.ts`), whose four method blocks map one-to-one to the four facets; with no adapter configured every group skips. An illustrative correctly-applied adapter (`src/examples/structural-reference-adapter.ts`) makes the suite self-verifying.
+
 ---
 
 **ADR-020 makes "weightless" a conformance predicate, not an adjective. An implementation may claim the four hard invariants only under proper application: the object-capability primitive (what), applied structurally (how), at construction (when), on the dominant path (where) — all four, conjunctively. Proper application *removes* the work; it does not accelerate it. A fast check is still a check, still weight; weightless means there is no check at all on the path that matters.**

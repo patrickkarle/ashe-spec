@@ -4,6 +4,20 @@ Reverse-chronological record of architectural decisions and significant artifact
 
 ---
 
+## [2026-05-31] **conformance/ — executable weightlessness-gate suite (ADR-020)**
+
+First runnable arm of the spec. Turns ADR-020's four conformance groups into an executable scaffold under [`conformance/`](conformance/) — the spec repo's first code.
+
+- **Adapter contract** (`src/adapter.ts`): the seam an implementation-under-test implements; four method blocks map one-to-one to the four facets (what/how/when/where). The suite touches no implementation directly.
+- **Language-neutral manifest** (`src/manifest.ts`): the 11 tests (W1–W3, H1–H3, N1–N2, R1–R3) as typed data, keyed by id so non-TypeScript implementations report comparable results across the four ADR-014 layers.
+- **Four test files** (`tests/group-{w,h,n,r}-*.test.ts`): real assertions, not empty stubs. Sharpest checks — W1 fails a SUT that returns **DENIED** for an unauthorized action (it was nameable, hence evaluated); N2 fails a SUT where disabling ASHE leaves a guarded action **reachable** (a removable front gate, not the system's shape); R2 fails a SUT that gates the routine 98% like the Tier C 2%.
+- **Graded, not binary**: Group H records `literal-zero` (structural, Layer 3/4) vs `amortized-small` (procedural, Layer 1, disclosed) per ADR-015 — a Layer-1 implementation passes honestly rather than by over-claiming.
+- **Self-verifying**: an illustrative correctly-applied adapter (`src/examples/structural-reference-adapter.ts`) makes `npm run test:example` green (11/11); with no adapter configured the suite skips all groups (it makes no claim about an unwired SUT).
+
+**Stack**: TypeScript + vitest (the ADR-011/017 P0 reference stack). `node_modules` git-ignored; lockfile committed. **Status**: v0.1 scaffold; the weightlessness gate is the first of the conformance commitments in ADR-001/015/017.
+
+---
+
 ## [2026-05-30] **ADR-020 — weightlessness is conformant only under proper application**
 
 Promotes the "proper application — the resolving discipline" principle from a WEIGHTLESS.md design note to a **binding conformance gate**. "Weightless" becomes a falsifiable four-part predicate, not an adjective.
