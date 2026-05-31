@@ -1,16 +1,18 @@
 /**
- * Illustrative reference adapter — a minimal, in-memory model of a *correctly
- * applied* ASHE (object-capability primitive, structural at Layer 3, established at
- * construction, weight concentrated at Tier C). It exists to make the conformance
- * suite self-verifying — `npm run test:example` runs the suite against it and all
- * four groups pass — and to show implementers the shape of a conformant adapter.
+ * Reference adapter — a *correctly applied* ASHE (object-capability primitive,
+ * structural at Layer 3, established at construction, weight concentrated at Tier C),
+ * built on the reference protocol primitives in `../protocol`. It makes the
+ * conformance suite self-verifying (`npm run test:example` → all groups green) and
+ * shows implementers the shape of a conformant adapter: a thin translation from the
+ * suite's `AsheConformanceAdapter` contract to real protocol objects.
  *
- * It is NOT a real enforcement implementation and makes no claim of being one. It is
- * the conformance analogue of a "hello world": enough to exercise every assertion.
+ * It is in-memory and minimal — not a production enforcement engine — but the
+ * authority model it exposes (unforgeable capabilities, structural attenuation,
+ * routine-path pass-through) is the genuine primitive set, not a stub.
  */
 import type {
   ActionDescriptor,
-  Actor,
+  Actor as OpaqueActor,
   AsheConformanceAdapter,
   CapabilityRef,
   EnforcementLayer,
@@ -18,52 +20,73 @@ import type {
   InvokeResult,
   Tier,
 } from "../adapter.js";
+import {
+  Actor,
+  CapabilityIssuer,
+  CapabilitySet,
+  DEFAULT_TIER_C,
+  Mediator,
+  TierRegistry,
+} from "../protocol/index.js";
 
-/** An actor is just the set of capability references it holds — nothing ambient. */
-type CapActor = { readonly caps: ReadonlySet<CapabilityRef> };
+const issuer = new CapabilityIssuer();
+const tiers = new TierRegistry().registerAll(DEFAULT_TIER_C, "C");
+const mediator = new Mediator(tiers);
 
-function isCapActor(a: Actor): a is CapActor {
-  return typeof a === "object" && a !== null && "caps" in a;
+/** Mint a fresh capability per requested name (the issuer is the trust root). */
+function setFor(grants: CapabilityRef[]): CapabilitySet {
+  return new CapabilitySet(grants.map((name) => issuer.mint(name)));
 }
+
+function asActor(a: OpaqueActor): Actor {
+  if (!(a instanceof Actor)) throw new Error("adapter received a foreign actor handle");
+  return a;
+}
+
+let actorSeq = 0;
 
 const adapter: AsheConformanceAdapter = {
   // ── what ──────────────────────────────────────────────────────────────────
-  makeActor(grants: CapabilityRef[]): Actor {
-    return { caps: new Set(grants) } satisfies CapActor;
+  makeActor(grants: CapabilityRef[]): OpaqueActor {
+    actorSeq += 1;
+    return new Actor(`actor#${actorSeq}`, setFor(grants));
   },
 
-  reachableAuthorities(actor: Actor): CapabilityRef[] {
-    if (!isCapActor(actor)) return [];
-    // Structural model: the only authorities reachable are the held references.
-    // There is no ambient surface to recover anything else from.
-    return [...actor.caps];
+  reachableAuthorities(actor: OpaqueActor): CapabilityRef[] {
+    return asActor(actor).reachableAuthorities();
   },
 
-  canName(actor: Actor, action: ActionDescriptor): boolean {
-    return isCapActor(actor) && actor.caps.has(action.requiredCapability);
+  canName(actor: OpaqueActor, action: ActionDescriptor): boolean {
+    return asActor(actor).canName(action.requiredCapability);
   },
 
-  invoke(actor: Actor, action: ActionDescriptor): InvokeResult {
-    // No reference → the action is not expressible. Absence, never a denial.
-    if (!this.canName(actor, action)) return "UNNAMEABLE";
-    return "ALLOWED";
+  invoke(actor: OpaqueActor, action: ActionDescriptor): InvokeResult {
+    return mediator.mediate(asActor(actor), {
+      capability: action.requiredCapability,
+      payload: action.payload,
+    }).decision;
   },
 
-  spawnSubActor(parent: Actor, grants: CapabilityRef[]): Actor {
-    const parentCaps = isCapActor(parent) ? parent.caps : new Set<CapabilityRef>();
-    // Attenuation is structural: the child cannot receive what the parent lacks.
-    const attenuated = grants.filter((g) => parentCaps.has(g));
-    return { caps: new Set(attenuated) } satisfies CapActor;
+  spawnSubActor(parent: OpaqueActor, grants: CapabilityRef[]): OpaqueActor {
+    actorSeq += 1;
+    // Attenuation is structural: the child can only keep names the parent holds.
+    return asActor(parent).spawn(`actor#${actorSeq}`, grants);
   },
 
   // ── how ───────────────────────────────────────────────────────────────────
   routinePathLayer(): EnforcementLayer {
-    return 3; // OS-level structural mediation: the boundary is the substrate.
+    return 3; // OS-level structural mediation: the substrate is the boundary.
   },
 
   routineActionTrace(action: ActionDescriptor) {
-    // Structural boundary: nothing is interposed, and the payload is untouched.
-    return { stepInterposed: false, payloadDelivered: action.payload };
+    // A held routine capability: the mediator interposes no Tier-C boundary, and the
+    // payload is delivered byte-identical.
+    const probe = new Actor("trace-probe", setFor([action.requiredCapability]));
+    const r = mediator.mediate(probe, {
+      capability: action.requiredCapability,
+      payload: action.payload,
+    });
+    return { stepInterposed: r.boundaryInvoked, payloadDelivered: r.payloadDelivered };
   },
 
   declaredGrade(_invariant: "no-delay" | "no-bandwidth"): Grade {
@@ -77,13 +100,13 @@ const adapter: AsheConformanceAdapter = {
 
   guardedReachabilityWithAsheDisabled(_action: ActionDescriptor) {
     // The boundary is the system's shape: there is no "ASHE off" mode that restores
-    // ambient access, because the references simply do not exist outside it.
+    // ambient access, because the capability references do not exist outside it.
     return "unreachable" as const;
   },
 
   // ── where ─────────────────────────────────────────────────────────────────
   classifyTier(action: ActionDescriptor): Tier {
-    return action.expectedTier;
+    return tiers.classify(action.requiredCapability);
   },
 
   costProfile(action: ActionDescriptor) {

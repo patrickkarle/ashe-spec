@@ -17,13 +17,39 @@ conformance/
     adapter.ts                            # the contract a SUT implements (the four facets)
     manifest.ts                           # language-neutral test definitions (W/H/N/R)
     setup.ts                              # loads the adapter named by $ASHE_CONFORMANCE_ADAPTER
-    examples/structural-reference-adapter.ts  # illustrative correctly-applied SUT
+    protocol/                             # nascent reference implementation (see below)
+      capability.ts                       #   unforgeable object-capabilities + attenuable sets
+      actor.ts                            #   principals; structural cascade attenuation
+      lease.ts                            #   boundary-amortized standing authority
+      tier.ts                             #   risk-tier classification (A/B routine, C boundary)
+      mediation.ts                        #   structural interception point (ADR-007)
+    examples/structural-reference-adapter.ts  # correctly-applied SUT, built on protocol/
   tests/
+    protocol/*.test.ts                    # unit tests for the primitives (always run)
     group-w-what.test.ts                  # object-capability primitive
     group-h-how.test.ts                   # structural mechanism
     group-n-when.test.ts                  # at construction
     group-r-where.test.ts                 # concentrated scope
 ```
+
+## `src/protocol/` — the nascent reference implementation
+
+The example adapter is no longer a toy: it delegates to real protocol primitives in
+`src/protocol/`, the embryonic in-memory reference implementation of ASHE's
+object-capability core. These are the genuine primitives, exercised both by their own
+unit tests and (via the adapter) by the weightlessness gate:
+
+- **`capability.ts`** — capabilities are *unforgeable* (the mint token is module-private;
+  `new Capability(...)` from outside throws). `CapabilitySet.attenuate()` can only drop
+  authority — there is no `grant`/`union`, so amplification is *unconstructable*, not merely checked.
+- **`actor.ts`** — a principal holds a set and nothing ambient; `spawn()` attenuates, so a
+  sub-actor exceeding its parent cannot be built (cascade attenuation, ADR-017).
+- **`lease.ts`** — authority is issued at a boundary with a TTL; the cost is paid once, then
+  the steady-state path is free (WEIGHTLESS amortization).
+- **`tier.ts`** — routine (A/B) vs the deliberate-weight Tier-C boundary.
+- **`mediation.ts`** — the interception point (ADR-007), structural: routine held actions pass
+  through with no boundary step and byte-identical payload; an unheld capability is `UNNAMEABLE`,
+  never `DENIED`.
 
 ## The four groups (ADR-020)
 
@@ -52,8 +78,9 @@ npm run test:example
 # is an AsheConformanceAdapter (see src/adapter.ts), then:
 ASHE_CONFORMANCE_ADAPTER=./path/to/your-adapter.ts npm test
 
-# With no adapter configured, every group SKIPS (the suite makes no claim about a
-# SUT that has not been wired in):
+# With no adapter configured, the protocol unit tests still run, and every
+# conformance group SKIPS (the suite makes no claim about a SUT that has not been
+# wired in):
 npm test
 ```
 

@@ -4,6 +4,24 @@ Reverse-chronological record of architectural decisions and significant artifact
 
 ---
 
+## [2026-05-31] **conformance/ — CI workflow + nascent reference protocol primitives**
+
+Two follow-ons to the executable conformance suite.
+
+**GitHub Actions** ([`.github/workflows/conformance.yml`](.github/workflows/conformance.yml)) — the repo's first CI, scoped via `paths:` to `conformance/**` so the doc-only surface is untouched. Runs `npm ci → typecheck → test:example` on Node 20: the weightlessness gate (ADR-020) now has a green check on every PR that touches it.
+
+**`conformance/src/protocol/`** — the example adapter is no longer a toy; it delegates to a real, in-memory **reference implementation** of ASHE's object-capability core, the embryonic Continuum-style impl the suite wraps:
+
+- **`capability.ts`** — *unforgeable* capabilities (the mint token is module-private; `new Capability(...)` from outside throws) and `CapabilitySet` whose only derivation is `attenuate()`. There is no `grant`/`union`: authority amplification is **unconstructable**, not merely checked — the object-capability primitive (VISION §1, ADR-003) made structural.
+- **`actor.ts`** — principals holding a set and nothing ambient; `spawn()` attenuates, so a sub-actor exceeding its parent cannot be built (cascade attenuation, ADR-017).
+- **`lease.ts`** — boundary-amortized standing authority with a TTL (WEIGHTLESS amortization; ADR-017 standing capabilities).
+- **`tier.ts`** — routine (A/B) vs the deliberate-weight Tier-C boundary.
+- **`mediation.ts`** — the interception point (ADR-007) applied structurally: routine held actions pass through with no boundary step and byte-identical payload; an unheld capability is `UNNAMEABLE`, never `DENIED`.
+
+14 protocol unit tests + 11 conformance assertions; `npm run test:example` → **25/25 green**, `tsc --noEmit` clean. `npm test` (no adapter) runs the 14 units and skips the 11 conformance groups. The protocol module is the seed of the reference implementation the ADRs describe; subsequent work grows it (intent declaration, audit, the validation graph).
+
+---
+
 ## [2026-05-31] **conformance/ — executable weightlessness-gate suite (ADR-020)**
 
 First runnable arm of the spec. Turns ADR-020's four conformance groups into an executable scaffold under [`conformance/`](conformance/) — the spec repo's first code.
