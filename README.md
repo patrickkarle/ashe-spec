@@ -35,7 +35,8 @@ The architectural thesis: **bounded outcomes ≠ censored behavior**. The model 
 | 1 | [MANIFESTO.md](./MANIFESTO.md) | The opener — what ASHE is in one paragraph; the bounded-outcomes commitment; what ASHE is not |
 | 2 | [CASE-FOR-NOW.md](./CASE-FOR-NOW.md) | The urgency case anchored on Anthropic's Glasswing operational data + the CVD disclosure-funnel quantification |
 | 3 | [VISION.md](./VISION.md) | The technical-strategic vision; start with §0 (keystone metaphor) + §1 (capability-broker thesis) |
-| 4 | [decisions/INDEX.md](./decisions/INDEX.md) | Architectural decision records (ADRs 001-019) — the design discipline trail |
+| 4 | [decisions/INDEX.md](./decisions/INDEX.md) | Architectural decision records (ADRs 001-020) — the design discipline trail |
+| 5 | [ROADMAP.md](./ROADMAP.md) | The long-range program plan — inception → Year-5 de-facto standard; tracks, gates, funding, metrics, risks |
 
 ## Provenance
 

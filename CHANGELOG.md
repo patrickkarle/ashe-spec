@@ -4,6 +4,18 @@ Reverse-chronological record of architectural decisions and significant artifact
 
 ---
 
+## [2026-06-02] **ROADMAP.md — long-range program plan (inception → Year 5)**
+
+New top-level companion artifact: the granular operating plan from inception to a five-year de-facto-standard horizon. Operationalizes the existing architecture (ADR-014 layer trajectory, ADR-009 profiles, ADR-015 methodology, ADR-020 conformance gate, the tri-surface design) and adds the standardization, funding, governance, and org tracks the ADRs presuppose but don't specify.
+
+**Posture (decided 2026-06):** open-core (ASHE Apache-2.0 + Continuum commercial reference impl); grant/standards-body funded; north star = **de facto cross-vendor standard** (adoption wins over revenue when they trade off).
+
+**Structure:** three tracks (Standard / Implementation / Adoption) + two enabling tracks (Sustainability / Org & Governance); version↔layer↔year mapping (v0 Layer-1 → v6 Layer-4 pilot); quarter-level deliverables per year with explicit entry/exit **gates**; a grant/sponsorship funding plan; a lean standards/eng-weighted org plan; per-year KPI targets (Floor/Target/Stretch graded); an 8-item risk register; and the sequencing logic (spec freeze → conformance suite → independent implementations → standards motion → layers 1→4, never skipped).
+
+**Keystone metric:** the *second independent conformant implementation* (Y2) — the line between a document and a real standard. Linked from README read-order as item 5.
+
+---
+
 ## [2026-05-31] **conformance/ — CI workflow + nascent reference protocol primitives**
 
 Two follow-ons to the executable conformance suite.
