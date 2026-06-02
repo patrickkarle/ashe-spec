@@ -4,6 +4,19 @@ Reverse-chronological record of architectural decisions and significant artifact
 
 ---
 
+## [2026-06-02] **design/ element specs + ROADMAP-MONTHLY.md**
+
+Two drill-downs on top of the long-range roadmap.
+
+**`design/` — element design specifications.** A new directory drilling each architectural element to the engineering level across four facets: **Technology** (substrate per ADR-014 enforcement layer 1→4), **Application** (consumers/use cases), **Algorithm** (procedures, invariants, complexity, security properties), and **Pseudocode** (implementable, kept consistent with the running primitives in `conformance/src/protocol/`). `design/INDEX.md` catalogs all 20 elements (grouped: core trust / decision / provenance / wire / tri-surface / enforcement substrate / services) with status flags and the drill order. First batch — the trust spine with running code:
+- `01-capability.md` — unforgeable references; attenuate-only sets; invariants I1 (unforgeability) / I2 (no amplification) / I3 (monotone cascade); per-layer representation (object ref → fd/Capsicum → signed TPM token).
+- `02-lease.md` — boundary-amortized authority; the **revocation lifecycle** resolving fast-validation vs prompt-revocation via short-TTL + epoch bump + targeted revocation list (bounded, *disclosed* staleness — the WEIGHTLESS/ADR-015 trade made explicit).
+- `03-mediation.md` — the interception point per layer; invariants M1 (no false denial on routine path) / M2 (UNNAMEABLE, never DENIED) / M3 (byte-identity); the Tier-C boundary evaluator. Tied directly to ADR-020 Groups W/H/R.
+
+**`ROADMAP-MONTHLY.md` — month-by-month execution.** Expands the quarter-level roadmap to 60 monthly slots (M01 = 2026-07 → M60 = 2031-06). Year 1 planned at task level across all five tracks; Years 2–5 at monthly-milestone level (granularity decreases with distance, by design — far-out monthly task lists are fiction; each annual exit gate re-plans the next year to task level). Gate markers (🟢 entry/exit · 🔺 layer go/no-go · ★ keystone) throughout; the two outranking numbers flagged — the second independent conformant implementation (M16→M24) and self-sustaining-with-neutrality (M54).
+
+---
+
 ## [2026-06-02] **ROADMAP.md — long-range program plan (inception → Year 5)**
 
 New top-level companion artifact: the granular operating plan from inception to a five-year de-facto-standard horizon. Operationalizes the existing architecture (ADR-014 layer trajectory, ADR-009 profiles, ADR-015 methodology, ADR-020 conformance gate, the tri-surface design) and adds the standardization, funding, governance, and org tracks the ADRs presuppose but don't specify.
