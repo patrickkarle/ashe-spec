@@ -22,3 +22,8 @@ Thumbs.db
 *.bak-*
 *.bak.*
 _archive_backup/
+
+# Conformance scaffold build artifacts
+conformance/node_modules/
+conformance/coverage/
+conformance/dist/

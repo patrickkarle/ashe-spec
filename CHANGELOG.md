@@ -4,6 +4,114 @@ Reverse-chronological record of architectural decisions and significant artifact
 
 ---
 
+## [2026-06-02] **design/ element specs + ROADMAP-MONTHLY.md**
+
+Two drill-downs on top of the long-range roadmap.
+
+**`design/` — element design specifications.** A new directory drilling each architectural element to the engineering level across four facets: **Technology** (substrate per ADR-014 enforcement layer 1→4), **Application** (consumers/use cases), **Algorithm** (procedures, invariants, complexity, security properties), and **Pseudocode** (implementable, kept consistent with the running primitives in `conformance/src/protocol/`). `design/INDEX.md` catalogs all 20 elements (grouped: core trust / decision / provenance / wire / tri-surface / enforcement substrate / services) with status flags and the drill order. First batch — the trust spine with running code:
+- `01-capability.md` — unforgeable references; attenuate-only sets; invariants I1 (unforgeability) / I2 (no amplification) / I3 (monotone cascade); per-layer representation (object ref → fd/Capsicum → signed TPM token).
+- `02-lease.md` — boundary-amortized authority; the **revocation lifecycle** resolving fast-validation vs prompt-revocation via short-TTL + epoch bump + targeted revocation list (bounded, *disclosed* staleness — the WEIGHTLESS/ADR-015 trade made explicit).
+- `03-mediation.md` — the interception point per layer; invariants M1 (no false denial on routine path) / M2 (UNNAMEABLE, never DENIED) / M3 (byte-identity); the Tier-C boundary evaluator. Tied directly to ADR-020 Groups W/H/R.
+
+**`ROADMAP-MONTHLY.md` — month-by-month execution.** Expands the quarter-level roadmap to 60 monthly slots (M01 = 2026-07 → M60 = 2031-06). Year 1 planned at task level across all five tracks; Years 2–5 at monthly-milestone level (granularity decreases with distance, by design — far-out monthly task lists are fiction; each annual exit gate re-plans the next year to task level). Gate markers (🟢 entry/exit · 🔺 layer go/no-go · ★ keystone) throughout; the two outranking numbers flagged — the second independent conformant implementation (M16→M24) and self-sustaining-with-neutrality (M54).
+
+---
+
+## [2026-06-02] **ROADMAP.md — long-range program plan (inception → Year 5)**
+
+New top-level companion artifact: the granular operating plan from inception to a five-year de-facto-standard horizon. Operationalizes the existing architecture (ADR-014 layer trajectory, ADR-009 profiles, ADR-015 methodology, ADR-020 conformance gate, the tri-surface design) and adds the standardization, funding, governance, and org tracks the ADRs presuppose but don't specify.
+
+**Posture (decided 2026-06):** open-core (ASHE Apache-2.0 + Continuum commercial reference impl); grant/standards-body funded; north star = **de facto cross-vendor standard** (adoption wins over revenue when they trade off).
+
+**Structure:** three tracks (Standard / Implementation / Adoption) + two enabling tracks (Sustainability / Org & Governance); version↔layer↔year mapping (v0 Layer-1 → v6 Layer-4 pilot); quarter-level deliverables per year with explicit entry/exit **gates**; a grant/sponsorship funding plan; a lean standards/eng-weighted org plan; per-year KPI targets (Floor/Target/Stretch graded); an 8-item risk register; and the sequencing logic (spec freeze → conformance suite → independent implementations → standards motion → layers 1→4, never skipped).
+
+**Keystone metric:** the *second independent conformant implementation* (Y2) — the line between a document and a real standard. Linked from README read-order as item 5.
+
+---
+
+## [2026-05-31] **conformance/ — CI workflow + nascent reference protocol primitives**
+
+Two follow-ons to the executable conformance suite.
+
+**GitHub Actions** ([`.github/workflows/conformance.yml`](.github/workflows/conformance.yml)) — the repo's first CI, scoped via `paths:` to `conformance/**` so the doc-only surface is untouched. Runs `npm ci → typecheck → test:example` on Node 20: the weightlessness gate (ADR-020) now has a green check on every PR that touches it.
+
+**`conformance/src/protocol/`** — the example adapter is no longer a toy; it delegates to a real, in-memory **reference implementation** of ASHE's object-capability core, the embryonic Continuum-style impl the suite wraps:
+
+- **`capability.ts`** — *unforgeable* capabilities (the mint token is module-private; `new Capability(...)` from outside throws) and `CapabilitySet` whose only derivation is `attenuate()`. There is no `grant`/`union`: authority amplification is **unconstructable**, not merely checked — the object-capability primitive (VISION §1, ADR-003) made structural.
+- **`actor.ts`** — principals holding a set and nothing ambient; `spawn()` attenuates, so a sub-actor exceeding its parent cannot be built (cascade attenuation, ADR-017).
+- **`lease.ts`** — boundary-amortized standing authority with a TTL (WEIGHTLESS amortization; ADR-017 standing capabilities).
+- **`tier.ts`** — routine (A/B) vs the deliberate-weight Tier-C boundary.
+- **`mediation.ts`** — the interception point (ADR-007) applied structurally: routine held actions pass through with no boundary step and byte-identical payload; an unheld capability is `UNNAMEABLE`, never `DENIED`.
+- **`audit.ts`** — tamper-evident **audit-by-construction** (ADR-013 Audit service; ADR-016 provenance): an append-only, SHA-256 hash-chained log. `verify()` catches any reorder/edit/drop of a sealed record; the Mediator optionally emits one record per decision (including `UNNAMEABLE` attempts), as a *local* append off the critical path — not a round-trip.
+- **`intent.ts`** — declare-once **intent reconciliation** (VISION §6; ADR-017 C2): an in-scope, unexpired action reconciles silently (the frictionless routine path keeps accountability without re-approval); out-of-scope or expired escalates.
+
+21 protocol unit tests + 11 conformance assertions; `npm run test:example` → **32/32 green**, `tsc --noEmit` clean. `npm test` (no adapter) runs the units and skips the conformance groups. The protocol module is the seed of the reference implementation the ADRs describe; subsequent work grows it (the validation graph, wire-format projections, the lease/revocation lifecycle).
+
+---
+
+## [2026-05-31] **conformance/ — executable weightlessness-gate suite (ADR-020)**
+
+First runnable arm of the spec. Turns ADR-020's four conformance groups into an executable scaffold under [`conformance/`](conformance/) — the spec repo's first code.
+
+- **Adapter contract** (`src/adapter.ts`): the seam an implementation-under-test implements; four method blocks map one-to-one to the four facets (what/how/when/where). The suite touches no implementation directly.
+- **Language-neutral manifest** (`src/manifest.ts`): the 11 tests (W1–W3, H1–H3, N1–N2, R1–R3) as typed data, keyed by id so non-TypeScript implementations report comparable results across the four ADR-014 layers.
+- **Four test files** (`tests/group-{w,h,n,r}-*.test.ts`): real assertions, not empty stubs. Sharpest checks — W1 fails a SUT that returns **DENIED** for an unauthorized action (it was nameable, hence evaluated); N2 fails a SUT where disabling ASHE leaves a guarded action **reachable** (a removable front gate, not the system's shape); R2 fails a SUT that gates the routine 98% like the Tier C 2%.
+- **Graded, not binary**: Group H records `literal-zero` (structural, Layer 3/4) vs `amortized-small` (procedural, Layer 1, disclosed) per ADR-015 — a Layer-1 implementation passes honestly rather than by over-claiming.
+- **Self-verifying**: an illustrative correctly-applied adapter (`src/examples/structural-reference-adapter.ts`) makes `npm run test:example` green (11/11); with no adapter configured the suite skips all groups (it makes no claim about an unwired SUT).
+
+**Stack**: TypeScript + vitest (the ADR-011/017 P0 reference stack). `node_modules` git-ignored; lockfile committed. **Status**: v0.1 scaffold; the weightlessness gate is the first of the conformance commitments in ADR-001/015/017.
+
+---
+
+## [2026-05-30] **ADR-020 — weightlessness is conformant only under proper application**
+
+Promotes the "proper application — the resolving discipline" principle from a WEIGHTLESS.md design note to a **binding conformance gate**. "Weightless" becomes a falsifiable four-part predicate, not an adjective.
+
+**The gate**: an ASHE implementation MAY claim the four hard invariants (no delay / no bandwidth / no data alteration / no interference) on the steady-state path **only if** it satisfies all four facets of proper application, conjunctively:
+
+- **What** — authority modeled as object-capability (*held or absent*); an unauthorized action MUST be *unnameable*, not checked-and-denied.
+- **How** — the routine-path boundary MUST be **structural** (the substrate's own mechanism per [ADR-014](decisions/ADR-014-phased-enforcement-model.md) Layer 2/3/4), not a procedural check ASHE runs as an added step.
+- **When** — the boundary MUST be established **at construction** (wall-up-first, `ashe workspace init` as step 1 per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md)), not bolted on as a front gate.
+- **Where** — literal-zero applied to the ~98% routine path; deliberate weight concentrated at the ~2% Tier C boundary. Uniform enforcement fails this facet.
+
+**What it forbids**: claiming "weightless" for a fast-but-real per-action check (a fast check is still a check), a permission-flag/identity model, a retrofitted gate, or uniform enforcement of the routine path.
+
+**Layer-1 caveat**: cooperating-SDK implementations are not disqualified — they MUST disclose, per [ADR-015](decisions/ADR-015-validation-methodology-and-tiered-claims.md) evidence grades, that no-delay/no-bandwidth are **amortized-small (Layer 1)** rather than **literal-zero (Layer 3/4 structural property)**. The gate distinguishes *honest amortized-small* from *false literal-zero*.
+
+**Conformance suite**: four test groups (W/H/N/R, one per facet), conjunctive — all four MUST pass. Group W tests unnameability + zero-ambient-authority; Group H tests no-added-step + byte-identity + layer-disclosure; Group N tests construction-order + no-front-gate (disabling ASHE must make guarded actions *unreachable*, not *ungated-but-reachable*); Group R tests path-classification + no-uniform-enforcement + friction-frequency. Results are graded per invariant (literal-zero vs amortized-small-disclosed), never binary-by-assertion.
+
+**Status**: Accepted. `Builds on` ADR-007, ADR-009, ADR-014, ADR-015, ADR-017. No ADR superseded. INDEX.md and WEIGHTLESS.md cross-reference it.
+
+---
+
+## [2026-05-30] **WEIGHTLESS.md — the weightlessness design principle**
+
+New companion artifact consolidating ASHE's "frictionless by mandate / TLS for the agent layer" promise into a single named engineering property and budget.
+
+**Core principle**: weightlessness is the *placement* of cost, not its absence — *pay once at an amortizable boundary (handshake, intent declaration, lease issuance); make the steady-state per-action path a local check with no network callout, no model token, and no human prompt.* The same handshake-vs-symmetric-crypto split TLS uses, generalized from bytes to actions.
+
+**What it adds**:
+
+1. **Axes-of-weight table** — names every axis a protocol layer can be *felt* on (latency, wire/token, cognitive, footprint, model-layer, adoption) and maps each to the existing ASHE mechanism that drives it toward zero, with ADR anchors.
+
+2. **Hot-path budget** — promotes the [ADR-007](decisions/ADR-007-interception-chain-pattern.md) locally-validated capability token from "v1 optimization" to the steady-state default; separates the rare slow path (Tier C, broker callout) from the routine fast path (in-process validation, sub-millisecond).
+
+3. **Evidence grades** — weightlessness claims tiered Floor/Target/Stretch per [ADR-015](decisions/ADR-015-validation-methodology-and-tiered-claims.md); only the <5 ms p99 interceptor bound and the arXiv 2511.23281 structured-over-HTML result are Floor-grade.
+
+4. **Honest limits** — the Tier C friction floor, cold-start boundary cost, the revocation-vs-token-speed trade, and audit-write cost are named as irreducible; weightlessness is *over a session*, not *over a single isolated call*.
+
+5. **Conformance budget** — a checkable per-property budget table; the one-line test: a routine action costs no round-trip, no token, no human attention — and the audit record still exists.
+
+6. **The four hard invariants** — strict statement of weightlessness as absolutes: *no delay, no added bandwidth, no data alteration, no interference.* No-data-alteration is Floor-contractual ([ADR-007](decisions/ADR-007-interception-chain-pattern.md): idempotent, no dispatch-state mutation — pass/deny, never rewrite); no-interference-with-surfaces is Floor-constructional ([ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md) additive + [ADR-009](decisions/ADR-009-deployment-profiles.md) graceful degradation). The honest tension is named: *active enforcement is interference by definition* — literal-zero holds only for pre-authorized actions and structurally-bounded denials, with remaining enforcement weight concentrated at the rare Tier C boundary where interference is the intended function.
+
+7. **Structural vs procedural mediation** — the path to literal zero on delay/bandwidth is making the capability boundary *structural* (object-capability: an unforgeable reference you were never handed is an absence, not a denied check) rather than *procedural* (a check that runs). True-zero is a Layer 3/4 property per [ADR-014](decisions/ADR-014-phased-enforcement-model.md) — where the boundary stops being a step on the path and becomes part of the system's shape, enforced by the substrate's existing mechanism (type system / OS capability / hardware root) at no added cost.
+
+8. **Proper application — the resolving discipline** — weightlessness is not a mechanism you install; it is the default state of a system whose authority boundaries were applied correctly, forfeited the instant they are applied incorrectly. "Properly apply" is four facets of one discipline, all required together: the object-capability primitive (*what*), structurally (*how*), at construction (*when*), on the dominant path (*where*). Drop any one and weight reappears. The point: proper application *removes* the work rather than accelerating it — a fast check is still a check, still weight; weightless means there is no check at all on the path that matters.
+
+**Status**: Companion design note (v0.x), consistent with the existing artifact bundle. No ADR superseded; cross-references [ADR-007](decisions/ADR-007-interception-chain-pattern.md), [ADR-009](decisions/ADR-009-deployment-profiles.md), [ADR-012](decisions/ADR-012-wire-format-grpc-protobuf-with-projections.md), [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md), [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md).
+
+---
+
 ## [2026-05-28] **ADR-019 v0.2 — phor-scoped governance refinement**
 
 ADR-019 amended to v0.2 incorporating phor-scoped governance frame as a load-bearing architectural layer that mediates occupant authority.

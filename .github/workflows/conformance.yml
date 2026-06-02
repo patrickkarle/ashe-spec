@@ -1,0 +1,33 @@
+name: conformance
+
+# Scoped to the conformance scaffold so the doc-only surface of the repo is untouched.
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "conformance/**"
+      - ".github/workflows/conformance.yml"
+  pull_request:
+    paths:
+      - "conformance/**"
+      - ".github/workflows/conformance.yml"
+
+jobs:
+  weightlessness-gate:
+    name: weightlessness gate (ADR-020)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: conformance
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: conformance/package-lock.json
+      - run: npm ci
+      - name: typecheck
+        run: npm run typecheck
+      - name: protocol unit tests + conformance suite (reference adapter)
+        run: npm run test:example
