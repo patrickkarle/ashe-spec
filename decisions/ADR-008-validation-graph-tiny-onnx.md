@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| Status | Accepted (forward-trajectory commitment; v0 implementation is rules-only foundation). **Amendment 2026-05-23**: §1's engine-reuse aspect ("reuse phor-graph-scheduler") is SUPERSEDED by [ADR-010](ADR-010-standalone-graph-engine.md). All other commitments in this ADR (graph as composition model, evaluator contract, default-to-tiny-ONNX, tier ladder, model-agnosticism) REMAIN IN FORCE. |
+| Status | Accepted (forward-progression commitment; v0 implementation is rules-only foundation). **Amendment 2026-05-23**: §1's engine-reuse aspect ("reuse phor-graph-scheduler") is SUPERSEDED by [ADR-010](ADR-010-standalone-graph-engine.md). All other commitments in this ADR (graph as composition model, evaluator contract, default-to-tiny-ONNX, tier ladder, model-agnosticism) REMAIN IN FORCE. |
 | Date | 2026-05-23 |
 | Decider | PK + Claude |
 | Touches | reference-arch (primary), protocol (any implementor faces same composition question) |
@@ -80,7 +80,7 @@ The majority of decisions terminate at tier 0 or tier 1. Tier 2 fires only on cl
 - ASHE deployed across the full spectrum from embedded to production hosts without forking the codebase (see ADR-009)
 - Long-term migration to fully-local intelligence (sovereign deployments) without cloud dependency
 - Per-deployment policy customization — same protocol surface, different evaluator topologies
-- Trajectory awareness — as compute cheapens, the right response is MORE tiny specialists, not bigger generalists; horizontal scaling preserved
+- Progression awareness — as compute cheapens, the right response is MORE tiny specialists, not bigger generalists; horizontal scaling preserved
 
 **What becomes impossible** (intentionally):
 

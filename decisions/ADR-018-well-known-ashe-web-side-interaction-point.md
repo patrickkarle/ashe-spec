@@ -178,7 +178,7 @@ A site adds `.well-known/ashe` *alongside* its existing HTML pages; HTML remains
 
 **1. Use a custom domain (`ashe.example.com`).** Rejected because:
 - Requires DNS configuration, separate TLS certificates, separate hosting decisions
-- Breaks the "small server-controlled opt-in" pattern that makes `.well-known/` adoption frictionless
+- Breaks the "small server-controlled opt-in" pattern that makes `.well-known/` adoption simple
 - Inconsistent with the discovery-endpoint lineage (no other `.well-known/`-style protocol uses a separate domain)
 
 **2. Use a different path (e.g., `/agent-api/` or `/ashe-discovery`).** Rejected because:
@@ -194,7 +194,7 @@ A site adds `.well-known/ashe` *alongside* its existing HTML pages; HTML remains
 **4. Mandate intent-adapted surface representation (no static alternative).** Rejected because:
 - Surface adaptation is an optimization, not a correctness requirement
 - Mandating it raises the implementation cost above what some adopters will invest
-- Adoption frictionlessness is a high-order value (per [ADR-017](ADR-017-sealed-workspace-foundational-dev-pattern.md) Commitment 2 analogue)
+- Freedom from per-action prompts is a high-order adoption value (per [ADR-017](ADR-017-sealed-workspace-foundational-dev-pattern.md) Commitment 2 analogue)
 
 **5. Make `.well-known/ashe` deliver only the handshake URL (no capability surface in the response).** Partially accepted:
 - For minimal implementations, `.well-known/ashe/index.json` MAY return only `{ashe.version, ashe.session-url, ashe.blueprint-url}` — three pointers — and let subsequent handshake against the session-url deliver the full surface
@@ -250,4 +250,4 @@ The three surfaces together realize ASHE's tri-surface architecture. Each is ind
 
 ---
 
-**ADR-018 commits ASHE to `.well-known/ashe` as the web-side discovery endpoint convention, peer to [ADR-017](ADR-017-sealed-workspace-foundational-dev-pattern.md)'s dev-side sealed-workspace convention and [ADR-014](ADR-014-phased-enforcement-model.md)'s agent-side enforcement trajectory. Together the three ADRs establish ASHE's tri-surface structural shape: agent-side capability broker, dev-side sealed workspace, web-side `.well-known/ashe` interaction point. The web-side surface inherits the `.well-known/` discovery-endpoint lineage (RFC 5785; OpenID provider discovery; security.txt) and extends it with the novel surface-representation-by-declared-intent commitment that delivers wire-economy end-to-end.**
+**ADR-018 commits ASHE to `.well-known/ashe` as the web-side discovery endpoint convention, peer to [ADR-017](ADR-017-sealed-workspace-foundational-dev-pattern.md)'s dev-side sealed-workspace convention and [ADR-014](ADR-014-phased-enforcement-model.md)'s agent-side enforcement progression. Together the three ADRs establish ASHE's tri-surface structural shape: agent-side capability broker, dev-side sealed workspace, web-side `.well-known/ashe` interaction point. The web-side surface inherits the `.well-known/` discovery-endpoint lineage (RFC 5785; OpenID provider discovery; security.txt) and extends it with the novel surface-representation-by-declared-intent commitment that delivers wire-economy end-to-end.**

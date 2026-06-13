@@ -10,13 +10,13 @@ An open specification by [Phor](https://phor.io) ™, published 2026-05-28.
 
 ASHE is a capability-broker protocol for AI agents acting inside software environments. When an agent takes an action — calls an API, writes a file, executes a command, browses a page — ASHE issues a time-bounded, scope-bounded *capability lease* that determines what the action is authorized to do, who can see it happened, and how it gets audited.
 
-The architectural thesis: **bounded outcomes ≠ censored behavior**. The model thinks, plans, and explores freely. The protocol-layer lease determines what actually happens in the world. This is the structural alternative to current internal-self-limitation safety paradigms (RLHF, constitutional training, refusal layers, capability lobotomy), which censor benign creativity along with malign output.
+The architectural thesis: **bounded outcomes ≠ censored behavior**. The model thinks, plans, and explores freely. The protocol-layer lease determines what actually happens in the world. This is the structural alternative to current internal-self-limitation safety paradigms (RLHF, constitutional training, refusal layers, training-time capability restriction), which censor benign creativity along with malign output.
 
 ## What ASHE delivers
 
 - **Tri-surface architecture**: agent-side enforcement + dev-side sealed workspaces + web-side `.well-known/ashe` handshakes
 - **Phased enforcement model**: cooperating-SDK (Layer 1) → runtime-hook (Layer 2) → OS-level mediation (Layer 3) → hardware-rooted (Layer 4)
-- **Frictionless by mandate**: standing capabilities + risk-tiered automation + cached approvals + inferred intent — eliminates per-action approval friction. Architectural analogy: TLS for the agent layer
+- **No per-action prompts by mandate**: standing capabilities + risk-tiered automation + cached approvals + inferred intent — removes per-action approval prompts
 - **Non-invasive at model layer**: doesn't modify the model; doesn't limit model reasoning capability; bounds outcomes structurally rather than censoring behavior heuristically
 - **Cross-vendor neutral**: one protocol, many implementations
 

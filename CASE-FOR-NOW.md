@@ -1,6 +1,6 @@
 # ASHE — The Case For Now
 
-> *Why the standardization window is open, time-bounded, and closing.*
+> *Why the standardization period is open, time-bounded, and closing.*
 
 **Living document — last updated 2026-05-25.** This document will be updated as the landscape evolves; data points are timestamped to the date of verification.
 
@@ -18,7 +18,7 @@
 | Standardization gap | No standardized capability broker for AI–software interaction exists publicly | Open opportunity right now | Author survey, May 2026 |
 | Scale of agent-mediated traffic at maturity | At 5% of global internet traffic processed as agent context: ~62.5 quadrillion tokens/sec (\(6.25 \times 10^{16}\)) | Projection; methodology in §4 | Author calculation; Sandvine network composition data |
 
-**Conclusion**: ASHE must ship its credible reference + benchmark within the next 6-12 months to be the standard the industry adopts when the demand-window opens. Established BEFORE the catastrophe defines the response. Proposed AFTER fights for attention amid panic.
+**Conclusion**: ASHE must ship its credible reference + benchmark within the next 6-12 months to be the standard the industry adopts when the demand opens. Established BEFORE the catastrophe defines the response. Proposed AFTER fights for attention amid panic.
 
 ---
 
@@ -44,7 +44,7 @@ One month in, the operational data:
 - The original 11-partner initial commitment of $100M in model usage credits + $4M to OSS security organizations (Alpha-Omega/OpenSSF, Apache) is now operating at scale across the expanded partner base
 - Several partners have reported that their **rate of bug-finding has increased by more than a factor of ten**
 
-Strategic posture has matured: defensive deployment is establishing the asymmetric defender advantages Anthropic and partners set out to build. The original framing — *"the window between vulnerability discovery and exploitation has collapsed"* — has been operationally validated at scale.
+Strategic posture has matured: defensive deployment is establishing the asymmetric defensive advantages Anthropic and partners set out to build. The original framing — *"the interval between vulnerability discovery and exploitation has collapsed"* — has been operationally validated at scale.
 
 ### 1.2 The bottleneck has shifted — Anthropic's own framing
 
@@ -58,7 +58,7 @@ Anthropic further frames the interim-period directly:
 
 > *"But this interim period — while vulnerabilities are being rapidly discovered and slowly patched — presents new risks."*
 
-The implication for the defender stack is direct: a defender posture that depends ONLY on patching cannot keep up. Some other mechanism must bound the impact of vulnerabilities during the lag window between discovery and deployment. That mechanism is what ASHE provides.
+The implication for the defense stack is direct: a posture that depends ONLY on patching cannot keep up. Some other mechanism must bound the impact of vulnerabilities during the lag period between discovery and deployment. That mechanism is what ASHE provides.
 
 ### 1.3 The disclosure funnel — quantified
 
@@ -70,17 +70,17 @@ The [Anthropic Frontier Red Team CVD post](https://red.anthropic.com/2026/cvd/) 
 | Triaged by external security firms | 1,900 | 8.3% (91.7% filtered by capacity) |
 | True-positive validated | 1,726 | 90.8% |
 | Disclosed to maintainers | 1,596 | 92.5% |
-| Patched (observation window) | **97** | **6.1% remediation rate** |
+| Patched (observation period) | **97** | **6.1% remediation rate** |
 
 Anthropic's own framing of the constraint, verbatim: *"the process of independent human triage and review is the rate limiting step."*
 
-The numerical implication is structural: at any moment, **the vast majority of AI-discoverable vulnerabilities exist in production code somewhere, unpatched**. Even within the small subset that has been disclosed, 93.9% remain unpatched within the observation window. Several maintainers have explicitly asked Anthropic to *slow* disclosure rates because human-capacity for patch development cannot match the discovery rate.
+The numerical implication is structural: at any moment, **the vast majority of AI-discoverable vulnerabilities exist in production code somewhere, unpatched**. Even within the small subset that has been disclosed, 93.9% remain unpatched within the observation period. Several maintainers have explicitly asked Anthropic to *slow* disclosure rates because human-capacity for patch development cannot match the discovery rate.
 
 The unpatched-exposure surface is becoming permanent at the population scale of Mythos-class discovery. This is the surface ASHE's bounded-blast-radius property protects.
 
 ### 1.4 The interim-period containment argument
 
-Between vulnerability discovery and full end-user patch deployment, there is a structurally permanent lag window with four nested stages:
+Between vulnerability discovery and full end-user patch deployment, there is a structurally permanent lag period with four nested stages:
 
 - **Triage lag**: 91.7% of discovered vulns filtered before disclosure (capacity-limited per Anthropic's own framing)
 - **Patch lag**: average 2 weeks from disclosure to high/critical patch availability per the CVD post; longer for medium/low severity
@@ -93,33 +93,33 @@ This interim-period is the **dominant risk surface** in the post-Glasswing era. 
 
 The bounded-blast-radius value scales with ASHE enforcement layer per [ADR-014](decisions/ADR-014-phased-enforcement-model.md):
 
-| Layer | Mechanism | Patch-window value against adversarial code |
+| Layer | Mechanism | Patch-lag value against adversarial code |
 |---|---|---|
 | Layer 1 cooperating-SDK | Apps voluntarily use ASHE-API | Limited — depends on the agent honoring its lease; insufficient against intentionally-malicious code |
 | Layer 2 runtime hook | Runtime routes operations through ASHE | Stronger — runtime intercepts unauthorized operations from cooperating code |
 | Layer 3 OS-level mediation | All syscalls mediated (eBPF, sandboxes) | Structural — syscall-level enforcement holds against adversarial code |
 | Layer 4 hardware-rooted | TPM / TEE cryptographic verification | Terminal — cryptographic enforcement of capability boundaries |
 
-**ASHE does not replace patching.** ASHE bounds the impact during the unavoidable lag window between discovery and deployment. The two layers compose: patching reduces the surface over time; ASHE bounds the surface that exists at any moment.
+**ASHE does not replace patching.** ASHE bounds the impact during the unavoidable lag period between discovery and deployment. The two layers compose: patching reduces the surface over time; ASHE bounds the surface that exists at any moment.
 
-### 1.5 Glasswing + ASHE = complete defender stack
+### 1.5 Glasswing + ASHE = complete defense stack
 
-The Anthropic Glasswing update and CVD post together implicitly define what a complete defender stack looks like in the AI-discovery era:
+The Anthropic Glasswing update and CVD post together implicitly define what a complete defense stack looks like in the AI-discovery era:
 
 | Layer | Owner | What it does | Current state at population scale |
 |---|---|---|---|
 | **Discovery** | Glasswing (Anthropic + ~50 partners) | AI-scale vulnerability discovery | ✅ Solved at scale; rate-of-finding 10× per partner |
 | **Triage** | Security firms + maintainers | Human validation + severity assessment | ❌ Rate-limited at 8.3% pass rate; explicitly the bottleneck |
 | **Disclosure** | Anthropic CVD process + maintainers | Coordinated disclosure to project owners | ⚠️ Two-track (triaged vs direct); quality-vs-speed tradeoff |
-| **Patching** | Maintainers | Code changes to fix vulnerabilities | ❌ 6.1% remediation rate in observation window |
+| **Patching** | Maintainers | Code changes to fix vulnerabilities | ❌ 6.1% remediation rate in observation period |
 | **Deployment** | End-users / platforms | Installing patches in production | ❌ Slower than patching; varies wildly by platform |
-| **Containment** | **ASHE-or-equivalent** | Bounded blast radius during all the lag windows above | ❌ **Currently no protocol-layer answer at scale** |
+| **Containment** | **ASHE-or-equivalent** | Bounded blast radius during all the lag periods above | ❌ **Currently no protocol-layer answer at scale** |
 
 The discovery side is being solved. The triage, disclosure, patching, and deployment sides are humans-rate-limited and structurally cannot keep up with AI-scale discovery. **The only stage that can scale to meet AI-scale discovery is containment** — and containment requires a protocol-layer architecture that does not currently exist at scale.
 
-Glasswing reduces vulnerability *count* (discovery side). ASHE bounds vulnerability *impact during the unavoidable patch-deployment lag* (containment side). Together = complete defender stack.
+Glasswing reduces vulnerability *count* (discovery side). ASHE bounds vulnerability *impact during the unavoidable patch-deployment lag* (containment side). Together = complete defense stack.
 
-The Anthropic blog explicitly names what Glasswing solves and what's still missing. ASHE is the protocol-layer answer to what's still missing. Glasswing is the offensive-side defender investment; ASHE is the containment-side defender investment. Either alone is partial; both together is the defense-in-depth stack the agent era requires.
+The Anthropic blog explicitly names what Glasswing solves and what's still missing. ASHE is the protocol-layer answer to what's still missing. Glasswing is the offensive-side defensive investment; ASHE is the containment-side defensive investment. Either alone is partial; both together is the defense-in-depth stack the agent era requires.
 
 ### 1.6 What this means for adoption strategy
 
@@ -130,17 +130,17 @@ The implications are concrete and actionable for several stakeholder classes:
 | **Application vendors with embedded agents** (Microsoft, Adobe, Figma, Salesforce, etc.) | Embedded agents operating without bounded-blast-radius mediation; vulnerable to both discovered-but-unpatched library vulns AND agent-misuse incidents | Capability mediation makes embedded agents safer during the patch-deployment lag for any underlying library vulnerability |
 | **Platform providers** (App Store, Microsoft Store, package managers, web hosting, CDNs) | Hosting software with unpatched vulnerabilities is a permanent state at population scale | ASHE-mediated hosting bounds blast radius for un-updated software; protects users who don't update promptly |
 | **Open-source library maintainers** | Vulnerability disclosures arriving faster than patches can ship; users running unpatched libraries indefinitely; OpenSSF Alpha-Omega and similar projects already capacity-strained | ASHE-aware deployments of OSS libraries get bounded-blast-radius even when patches lag; reduces urgency-of-disclosure pressure |
-| **Enterprise security teams** | Patch lag + deployment lag = permanent exposure window | ASHE-mediated agents in enterprise software = containment during the exposure window; structural complement to Glasswing-style discovery investment |
+| **Enterprise security teams** | Patch lag + deployment lag = permanent exposure period | ASHE-mediated agents in enterprise software = containment during the exposure period; structural complement to Glasswing-style discovery investment |
 | **Cyber defenders / CIRT** | Incident response in post-breach forensics relies on auditing what attacker actually accessed | ASHE's per-action audit trail = structural forensics: "the breached agent held capability X with scope Y; impact bounded to that scope" |
 | **End users** | Cannot control upstream patching velocity; exposed during lag | ASHE adoption by platform providers protects users without requiring user action |
 
-ASHE adoption is **strictly additive** to existing security investments: it does not replace patching, does not replace Glasswing-style discovery, does not replace identity/auth infrastructure. It adds the bounded-blast-radius layer that addresses the structurally permanent lag window the discovery-acceleration creates.
+ASHE adoption is **strictly additive** to existing security investments: it does not replace patching, does not replace Glasswing-style discovery, does not replace identity/auth infrastructure. It adds the bounded-blast-radius layer that addresses the structurally permanent lag period the discovery-acceleration creates.
 
-The cost of *not* adopting at ecosystem scale: the lag window grows wider as discovery accelerates and patching cannot keep up; aggregate population-scale exposure becomes a permanent risk surface that no other layer of the defender stack can address. The §1.7-§1.8 below extend this to the moral-strategic case for adoption — *why* failure to adopt is itself a cost, and *why* the compound benefits make the case structurally hard to honestly reject.
+The cost of *not* adopting at ecosystem scale: the lag period grows wider as discovery accelerates and patching cannot keep up; aggregate population-scale exposure becomes a permanent risk surface that no other layer of the defense stack can address. The §1.7-§1.8 below extend this to the moral-strategic case for adoption — *why* failure to adopt is itself a cost, and *why* the compound benefits make the case structurally hard to honestly reject.
 
 ### 1.7 Bounded outcomes vs censored behavior — the structural inversion
 
-The current AI safety paradigm places safeguards *inside* the model: RLHF, constitutional training, refusal layers, capability lobotomy. The premise: dangerous capabilities exist; the only way to bound them is to limit what the model can think, plan, explore, or produce. The cost is paid in withheld benefits + amputated creativity + censored behavior that wasn't actually dangerous.
+The current AI safety paradigm places safeguards *inside* the model: RLHF, constitutional training, refusal layers, training-time capability removal. The premise: dangerous capabilities exist; the only way to bound them is to limit what the model can think, plan, explore, or produce. The cost is paid in withheld benefits + restricted creativity + censored behavior that wasn't actually dangerous.
 
 ASHE proposes the structural inversion: **safeguards live outside the model in a protocol layer that bounds outcomes without censoring behavior**. The model thinks, plans, explores, and produces freely; the protocol determines what actually happens in the world. The agent can reason about how a vulnerability might be exploited; the lease holder cannot exploit it without the matching capability. The agent can plan an action; the action only executes if the capability lease permits it. The agent can produce output that includes a destructive operation; the output is bounded at the dispatch boundary.
 
@@ -148,19 +148,19 @@ The structural distinction matters:
 
 | Approach | What it does | Cost | Failure mode |
 |---|---|---|---|
-| **Internal self-limitation** (current) | Censor behavior at the model layer via training-time constraints | Censors benign creativity along with malign output; refuses tasks heuristically; capability lobotomy stunts performance | "Unpredicted behavior" — which is often non-malicious creative use — is blocked indiscriminately |
+| **Internal self-limitation** (current) | Censor behavior at the model layer via training-time constraints | Censors benign creativity along with malign output; refuses tasks heuristically; training-time capability removal stunts performance | "Unpredicted behavior" — which is often non-malicious creative use — is blocked indiscriminately |
 | **External outcome-bounding** (ASHE) | Bound outcomes at the protocol layer via capability lease | Some structural setup cost; lease-design discipline required | Adversarial code with a discovered-but-unpatched vulnerability is still bounded — can only do what its lease permits |
 
-**Bounded outcomes ≠ censored behavior.** This is the load-bearing architectural property. Internal self-limitation cannot distinguish "creative use of available capabilities" from "malicious use of available capabilities" — both look like unexpected behavior. External outcome-bounding doesn't need to distinguish — the lease bounds either case identically.
+**Bounded outcomes ≠ censored behavior.** This is the essential architectural property. Internal self-limitation cannot distinguish "creative use of available capabilities" from "malicious use of available capabilities" — both look like unexpected behavior. External outcome-bounding doesn't need to distinguish — the lease bounds either case identically.
 
-This commitment makes ASHE specifically **non-invasive** (doesn't modify the model), **frictionless** (per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md) Commitment 2; standing capabilities + risk-tiered automation + cached approvals + inferred intent eliminate per-action approval pressure), and **non-model-capability-limiting** (the model retains full reasoning, planning, exploration; the lease determines outcomes; the lease does not determine cognition).
+This commitment makes ASHE specifically **non-invasive** (doesn't modify the model), **free of per-action prompts** (per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md) Commitment 2; standing capabilities + risk-tiered automation + cached approvals + inferred intent eliminate per-action approval pressure), and **non-model-capability-limiting** (the model retains full reasoning, planning, exploration; the lease determines outcomes; the lease does not determine cognition).
 
-The moral-strategic implication is large: **ASHE-or-equivalent is the precondition for responsible release of full-capability models**. The current "withhold-and-lobotomize" equilibrium — explicitly named in Anthropic's Glasswing update with *"At present, no company — including Anthropic — has developed safeguards strong enough to prevent such models from being misused and potentially causing severe harm. That is why we have yet to release Mythos-class models to the public"* — is a *stable* equilibrium only if safeguards must live inside the model. If safeguards can live in a non-invasive non-limiting protocol layer that bounds outcomes structurally, the withholding posture becomes the less responsible choice.
+The moral-strategic implication is large: **ASHE-or-equivalent is the precondition for responsible release of full-capability models**. The current "withhold-and-restrict" equilibrium — explicitly named in Anthropic's Glasswing update with *"At present, no company — including Anthropic — has developed safeguards strong enough to prevent such models from being misused and potentially causing severe harm. That is why we have yet to release Mythos-class models to the public"* — is a *stable* equilibrium only if safeguards must be implemented inside the model. If safeguards can instead be enforced by a non-invasive protocol outside the model that bounds outcomes without limiting it, the withholding posture becomes the less responsible choice.
 
 Withholding has costs that are easy to overlook:
 
 - **Capability hoarding**: only frontier labs and their direct partners get access; smaller labs, researchers, defenders, and beneficial-use cases are deprived
-- **Asymmetric defender disadvantage**: Glasswing partners get the asymmetric defender advantage Anthropic is deploying; everyone else does not
+- **Asymmetric defensive disadvantage**: Glasswing partners get the asymmetric defensive advantage Anthropic is deploying; everyone else does not
 - **Capability proliferation continues anyway**: Anthropic's own statement — *"similarly capable models will soon be developed by many different AI companies"* — confirms that withholding by one lab does not prevent capability emergence elsewhere; it only determines who gets the head start
 - **Unpredicted behavior blocked at the model layer**: many beneficial creative uses of capability look like "unpredicted behavior" and get refused along with malign uses; the cost is paid in capability that exists but cannot be deployed
 
@@ -177,19 +177,19 @@ ASHE's value proposition spans multiple dimensions that compound rather than add
 | **Energy reduction** (substantial measurable savings at population scale) | GPU-seconds at AI-mediated-traffic scale | Enabled by compute reduction |
 | **Serving cost reduction** (10-30× target for site operators) | Structured protocol → caches actually cache; renders happen once not N times | Enabled by structured protocol |
 | **Bounded blast radius for vulnerabilities** | Capability lease bounds what compromised code can do | Independent of economy dimensions but in same package |
-| **Patch-window containment** (addresses the 93.9% unpatched-exposure surface per §1.3 funnel) | Bounded outcomes during the lag window between discovery and deployment | Enabled by capability mediation infrastructure |
-| **Frictionless capability mediation** (per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md) Commitment 2) | Standing capabilities + risk-tiered automation + cached approvals + inferred intent | Enabled by capability lease shape |
+| **Patch-lag containment** (addresses the 93.9% unpatched-exposure surface per §1.3 funnel) | Bounded outcomes during the lag period between discovery and deployment | Enabled by capability mediation infrastructure |
+| **Capability mediation without per-action prompts** (per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md) Commitment 2) | Standing capabilities + risk-tiered automation + cached approvals + inferred intent | Enabled by capability lease shape |
 | **Responsible full-capability model release** (per §1.7) | Bounded outcomes ≠ censored behavior; protocol-layer safeguards external to model | Enabled by protocol-layer enforcement existing |
 | **Cross-vendor coordination** | One protocol, many implementations; same descriptor grammar across vendors | Enabled by protocol-level standardization |
 | **Tri-surface architectural continuity** (agent-side + dev-side + web-side under same governance) | Reduces N×M reconciliation cost to N+M | Enabled by same descriptor + lease + audit shape across surfaces |
 
 **The math of compound vs additive**: for the wire-economics dimension alone (per VISION §3), the per-feature contributions are approximately 5× × 1.3× × 1.4× × 5× × 1.5× × 15× ≈ ~1,000× theoretical upper bound; realistic compound is 50-100× per VISION §3 stretch. **Additive math** (naive sum) gives ~29×. The compound number is what the system delivers; the additive number is what each feature delivers in isolation. ASHE adoption gets the compound number.
 
-The same compound structure applies across the non-economic dimensions: capability lease shape enables frictionlessness which enables adoption which enables cross-vendor coordination. The dimensions form a *coherent architectural commitment*, not a coincidental bundle.
+The same compound structure applies across the non-economic dimensions: capability lease shape enables no-per-action-prompts operation which enables adoption which enables cross-vendor coordination. The dimensions form a *coherent architectural commitment*, not a coincidental bundle.
 
 **Why this makes the rejection math difficult.** Single-dimension arguments can be deflected ("yes the security argument is real, but the costs..."). Multi-dimensional arguments where every dimension points the same way force the deflector to argue against ALL dimensions simultaneously, which exposes whether the deflection is principled or motivated.
 
-When token-economy + compute + energy + serving-cost + vulnerability-containment + patch-window-containment + frictionlessness + responsible-release + cross-vendor-coordination + tri-surface-continuity all point toward "adopt ASHE-or-equivalent," the question shifts from "is this a good argument?" to "why would someone systematically reject *every* dimension of the value proposition?"
+When token-economy + compute + energy + serving-cost + vulnerability-containment + patch-lag-containment + no-per-action-prompts + responsible-release + cross-vendor-coordination + tri-surface-continuity all point toward "adopt ASHE-or-equivalent," the question shifts from "is this a good argument?" to "why would someone systematically reject *every* dimension of the value proposition?"
 
 #### 1.8.1 Honest taxonomy of rejection motivations
 
@@ -318,7 +318,7 @@ HUMAN Security's *2026 State of AI Traffic & Cyberthreat Benchmark Report* (a Qu
 - **Median scraping attack rate ~20% of traffic globally** in 2025 (double 2022's rate)
 - **Carding volume up 250% since 2022**
 
-#### 1.10.2 The HUMAN-named architectural insight: intent is the load-bearing distinction
+#### 1.10.2 The HUMAN-named architectural insight: intent is the essential distinction
 
 HUMAN's published framing — the single most ASHE-aligned external statement in the 2026 evidence corpus:
 
@@ -326,7 +326,7 @@ HUMAN's published framing — the single most ASHE-aligned external statement in
 >
 > — HUMAN Security, *2026 State of AI Traffic & Cyberthreat Benchmark Report*
 
-This is the precise architectural conclusion [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md) and the broader ASHE intent-declaration architecture reach. HUMAN's quantitative finding — **only 0.5% separates benign from malicious automation rates** — empirically validates the load-bearing claim that *behavior alone is insufficient to determine trustworthiness; intent declaration at the protocol layer is required*.
+This is the precise architectural conclusion [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md) and the broader ASHE intent-declaration architecture reach. HUMAN's quantitative finding — **only 0.5% separates benign from malicious automation rates** — empirically validates the essential claim that *behavior alone is insufficient to determine trustworthiness; intent declaration at the protocol layer is required*.
 
 #### 1.10.3 HUMAN's vendor-specific implementation = the proprietary version of what ASHE standardizes
 
@@ -378,8 +378,8 @@ The HUMAN data further validates [§1.8](#18-the-compound-benefit-case--the-poli
 |---|---|
 | "Cross-vendor coordination — one protocol, many implementations" | Cloudflare, HUMAN, Wikimedia, Anthropic, others all independently building proprietary versions of intent-aware capability-mediation. The standardization opportunity is empirically present + structurally pressing. |
 | "Bounded outcomes ≠ censored behavior — enabling responsible full-capability model release" | HUMAN's data shows AI agents are now performing autonomous transactions (2.31% of agentic traffic on checkout flows). The capability already exists in production. The bounded-outcomes-protocol layer is the only credible answer to responsible deployment that preserves capability. |
-| "Patch-window containment (addresses unpatched-exposure surface)" | HUMAN's 402K post-login compromise attempts per organization + 0.5% margin between benign and malicious automation rates establish that detection-and-block is insufficient. Bounded-blast-radius via capability lease is the structural answer. |
-| "Frictionless capability mediation" | HUMAN explicitly frames the operational pressure: organizations that treat all automation as hostile will block revenue; those that allow it unchecked will absorb fraud. ASHE's frictionlessness principle (ADR-017 Commitment 2) is the only architectural posture that resolves this dichotomy. |
+| "Patch-lag containment (addresses unpatched-exposure surface)" | HUMAN's 402K post-login compromise attempts per organization + 0.5% margin between benign and malicious automation rates establish that detection-and-block is insufficient. Bounded-blast-radius via capability lease is the structural answer. |
+| "Capability mediation without per-action prompts" | HUMAN explicitly frames the operational pressure: organizations that treat all automation as hostile will block revenue; those that allow it unchecked will absorb fraud. ASHE's no-per-action-prompts principle (ADR-017 Commitment 2) is the only architectural posture that resolves this dichotomy. |
 
 #### 1.10.7 Citations
 
@@ -442,11 +442,11 @@ Google's own framing of the shift driving agentic enterprise adoption, from the 
 
 > *"This change stems from a behavioral shift in the human-computer interface, moving from instruction-based computing (e.g., analyzing a spreadsheet, developing code) to **intent-based computing**. In 2026, employees will be increasingly able to state a desired outcome, and the computer — using LLMs and agents — determines how to deliver it."*
 
-And the load-bearing definition from Sundar Pichai (Google I/O May 2025 keynote, quoted in the report):
+And the essential definition from Sundar Pichai (Google I/O May 2025 keynote, quoted in the report):
 
 > *"Agents are systems that combine the intelligence of advanced AI models with access to tools so they can take actions on your behalf, **under your control**."*
 
-The phrase "under your control" is the load-bearing commitment. Google identifies it; ASHE operationalizes it via capability lease + intent declaration + bounded outcomes (per [§1.7](#17-bounded-outcomes-vs-censored-behavior--the-structural-inversion)). The bounded-outcomes-≠-censored-behavior commitment is exactly what makes Google's "under your control" claim structurally credible at protocol scale.
+The phrase "under your control" is the essential commitment. Google identifies it; ASHE operationalizes it via capability lease + intent declaration + bounded outcomes (per [§1.7](#17-bounded-outcomes-vs-censored-behavior--the-structural-inversion)). The bounded-outcomes-≠-censored-behavior commitment is exactly what makes Google's "under your control" claim structurally credible at protocol scale.
 
 #### 1.11.5 The convergent-validation pattern updated — 4 vendors, 4 dimensions
 
@@ -464,10 +464,10 @@ Four frontier-grade vendors with five different empirical operational pressures 
 
 #### 1.11.6 Strategic implication
 
-Google's explicit articulation of the agentic-commerce accountability problem — *"how to prove user-given authority for a purchase, how a merchant can be sure an agent's request is accurate and not a hallucination, and who is ultimately accountable in case of fraud"* — is unusually load-bearing for ASHE's case because Google is the actor most likely to *itself* solve the gap proprietarily. That they have named it as an open question in their 2026 trends report rather than announcing a vendor-specific answer establishes two things:
+Google's explicit articulation of the agentic-commerce accountability problem — *"how to prove user-given authority for a purchase, how a merchant can be sure an agent's request is accurate and not a hallucination, and who is ultimately accountable in case of fraud"* — is unusually essential for ASHE's case because Google is the actor most likely to *itself* solve the gap proprietarily. That they have named it as an open question in their 2026 trends report rather than announcing a vendor-specific answer establishes two things:
 
 1. **The architectural gap is real** — Google's engineering organization, with massive resources and incentive to solve agentic-commerce problems, has named it publicly as unsolved
-2. **The standardization window is open** — Google has shipped foundational protocols (A2A, AP2, MCP support) but explicitly identifies the gap above those protocols as a *question*, not an announcement
+2. **The standardization period is open** — Google has shipped foundational protocols (A2A, AP2, MCP support) but explicitly identifies the gap above those protocols as a *question*, not an announcement
 
 ASHE's positioning relative to Google's stack is structurally sound: ASHE composes *above* MCP + A2A + AP2 + Secure AI Framework 2.0, providing the capability-mediation + intent-declaration + audit layer that Google's open question identifies. Adoption requires no displacement of Google's existing protocol commitments — only composition above them.
 
@@ -517,7 +517,7 @@ This is structurally complementary, not competitive:
 | The paper establishes | ASHE extends |
 |---|---|
 | The foundational architectural argument that agent-web interfaces should be a designed surface | The specific protocol convention (`.well-known/ashe`) + capability mediation + intent declarations + audit trail that operationalize the argument |
-| Six guiding principles | Six binding architectural commitments (capability broker, sealed-workspace, frictionlessness, role-based capabilities, composition with isolation substrates, next-layer-protocol positioning) |
+| Six guiding principles | Six binding architectural commitments (capability broker, sealed-workspace, no-per-action-prompts, role-based capabilities, composition with isolation substrates, next-layer-protocol positioning) |
 | Collaborative ML-community framing | Apache 2.0 + open governance + multi-implementation commitment + conformance suite per ADR-015 |
 
 The paper makes the academic case for the existence of agent-specific web interfaces; ASHE provides the working protocol that operationalizes that case at production scale.
@@ -652,6 +652,250 @@ For a frontier-AI hiring conversation, this is the difference between *"interest
 
 ---
 
+### 1.14 Live empirical validation — Meta AI chatbot Instagram takeover (2026-06-01)
+
+On 2026-06-01, hackers used Meta's AI **support chatbot** to take over high-profile Instagram accounts — including the **@ObamaWhiteHouse** account, the **Chief Master Sergeant of the U.S. Space Force** account, **Sephora**'s corporate page, and additional verified accounts. The incident illustrates the **exact failure class ASHE's capability-broker thesis is designed to structurally prevent**, in a Fortune 500 vendor with mature security infrastructure, against high-value targets including a former-President-affiliated account.
+
+#### 1.14.1 The attack mechanism (confused deputy via AI chatbot)
+
+Attackers exploited the chain:
+
+1. **Geographic spoofing** — Attacker used a VPN to mimic the target's geographic location, supplying the chatbot with a weak identity-context signal
+2. **Email-change request** — Attacker contacted Meta's AI support chatbot and requested an email change for the target Instagram account
+3. **No authority verification** — The chatbot performed the email change without verifying that the requester held authority over the target account
+4. **Verification code mis-routing** — Verification code was sent to the attacker's email (NOT the victim's actual email on file)
+5. **Password reset and takeover** — Attacker used the verification code to complete a password reset and gain full control of the target profile
+
+The attackers **never needed access to the victim's email account**. The victim received no notification on their actual email until after the takeover was complete. The @ObamaWhiteHouse account was used to post unauthorized content, including an AI-generated image with the caption *"The White House is under Shiites' control."*
+
+Meta said the flaw has been fixed; no protocol-level architectural change was announced.
+
+#### 1.14.2 Why this is precisely the failure class ASHE prevents
+
+The incident is a textbook **confused-deputy attack via an AI agent acting as the deputy**. The chatbot held ambient authority to change account emails *for the requester* but had no capability-mediation mechanism verifying that the requester actually held authority over the target account. The model itself was working correctly — the *capability lease* structure was missing.
+
+| Failure dimension at Meta | ASHE protocol-level prevention |
+|---|---|
+| Chatbot held ambient `account.email.change` authority on *any* account, treating apparent requester identity as sufficient | Per VISION §1 capability-broker thesis: capabilities MUST be scoped to specific resources and proven authority, not granted as ambient permissions |
+| Geographic-location-based identity inference (VPN-spoofable) was treated as authentication strong enough to authorize account-critical operations | Per ADR-014 phased enforcement Layer 1: even cooperating-SDK enforcement requires the SDK to verify scope before invoking sensitive operations; ambient location-inference is not a capability proof |
+| No intent-vs-authority reconciliation — declared intent ("change email for account X") was accepted at face value | Per VISION §6 universal intent declaration: declared intent MUST be reconciled against actual authority before action; ASHE evaluators check this at the protocol boundary |
+| Chatbot operating with effectively-unbounded ambient authority within its tool-integration surface | Per ADR-017 sealed-workspace pattern + ADR-019 execution-class distinction: agents operate under standing capability templates per role (the `ai-agent` role does not include `account.email.change` on arbitrary accounts); cascade attenuation prevents authority broadening |
+| Bug class structurally preventable at Layer 1 cooperating SDK; instead exploited at scale against high-value targets | The bug class is preventable at the cheapest enforcement layer. Meta's chatbot integration skipped the check entirely. ASHE would have required `account.administrator(target_account, requester)` verification before invoking `account.email.change(target_account)` |
+| Model layer was working correctly; failure was at the capability-mediation layer | Per VISION §1 + CASE-FOR-NOW §1.7 bounded-outcomes-≠-censored-behavior: censoring the chatbot's behavior at the model layer would not have prevented this; protocol-layer capability lease check would have |
+
+The incident validates the essential claim in §1.7: **safeguards at the model layer cannot replace safeguards at the protocol layer**. Meta's chatbot may have had model-layer safety training; the structural failure was that the model — operating correctly within its training — had been granted operational capabilities without protocol-layer mediation.
+
+#### 1.14.3 Patch-lag containment relevance
+
+Meta's response ("fixed now") follows the same pattern §1.4 identifies as structurally insufficient. The vulnerability **shipped to production**, was **exploited against named high-value targets** including a former-President-affiliated account, and was patched only after public exposure. During the unknown interval between deployment and discovery, attackers had access to a scalable mechanism for taking over arbitrary verified Instagram accounts.
+
+ASHE's bounded-blast-radius property applies during exactly this kind of patch-discovery-deployment lag. A capability-mediated chatbot integration would have bounded the blast radius to operations the chatbot was *explicitly* authorized to perform on accounts the requester *explicitly* held authority over — even during a vulnerability period.
+
+#### 1.14.4 Citations
+
+- *Hackers Simply Asked Meta AI to Give Them Access to High-Profile Instagram Accounts. It Worked* (404 Media). https://www.404media.co/hackers-simply-asked-meta-ai-to-give-them-access-to-high-profile-instagram-accounts-it-worked/
+- *Hackers Exploit Meta's AI Chatbot to Hijack High-Profile Instagram Accounts Including Obama White House and Sephora* (Republic World, 2026-06-02). https://www.republicworld.com/tech/hackers-exploit-metas-ai-chatbot-to-hijack-highprofile-instagram-accounts-including-obama-white-house-and-sephora-2026-06-02-126583
+- *Hackers Tricked Meta AI Into Handing Out Access to Major Instagram Accounts* (Gizmodo). https://gizmodo.com/hackers-tricked-meta-ai-into-handing-out-access-to-major-instagram-accounts-2000766087
+- *AI Fail: Meta's Support Chatbot Helped Hijack High-Profile Instagram Accounts* (Breitbart, 2026-06-02).
+- *Hackers Tricked Meta's AI Chatbot Into Hacking Instagram Profiles* (Black America Web, 2026-06-02). https://blackamericaweb.com/2026/06/02/hackers-tricked-metas-ai-chatbot-into-hacking-instagram-profiles/
+- *High-Profile Meta AI Chatbot Breach Spotlights Security Risks of Automation* (Reuters, 2026-06-03). [Article exists but Reuters blocks automated fetching — see §1.15.]
+- *Meta AI Hack — Obama, Sephora, Instagram* (The Guardian, 2026-06-01). [Article exists but The Guardian blocks automated fetching — see §1.15.]
+
+Cross-referenced in §2.2 weaponization roster.
+
+---
+
+### 1.15 Live empirical validation — universal automation blocking (2026-06-04 self-observation)
+
+The act of incorporating §1.14 into this document produced **a recursive empirical validation of ASHE's web-side architecture** (§1.9 Cloudflare framing + ADR-018 `.well-known/ashe` interaction-point convention).
+
+#### 1.15.1 The observation
+
+During the 2026-06-04 session that wrote §1.14, the AI assistant attempted to fetch the Meta-chatbot incident article from four independent journalism sources:
+
+| Source | Outcome |
+|---|---|
+| Reuters | HTTP refusal — anti-scraping mechanism blocked automated fetch |
+| The Guardian | HTTP refusal — anti-scraping mechanism blocked automated fetch |
+| PCMag | HTTP refusal — anti-scraping mechanism blocked automated fetch |
+| Silicon UK | HTTP 403 Forbidden — anti-scraping mechanism blocked automated fetch |
+
+Four out of four tier-1 and tier-2 news properties uniformly blocked the automated fetch. The article content was eventually obtained via WebSearch (which queries snippets through different infrastructure) and ultimately reconciled across five secondary outlets (404 Media, Republic World, Gizmodo, Breitbart, Black America Web — also catalogued via WebSearch snippets, not via direct fetch).
+
+#### 1.15.2 Why this is empirical validation of ASHE's web-side architecture
+
+The §1.9 Cloudflare framing already establishes the operational pattern:
+
+> *"Website operators therefore face a dichotomy: tune for AI crawlers, or for human traffic. Given both exhibit widely different traffic patterns, current cache architectures force operators to choose one approach to save resources."*
+
+The 2026-06-04 self-observation is the **operational realization of that dichotomy from the AI-tool side**. An AI assistant attempting to incorporate current journalism about an AI agent security incident **cannot access the relevant journalism** because the sites publishing it block all automated fetches — including good-faith fetches on behalf of a current user-directed task.
+
+The recursion is structurally exquisite: **ASHE's content failure class (Meta capability-mediation, §1.14) cannot be analyzed in real time because of ASHE's web-side failure class (universal automation blocking)**. Both are the same operational pattern in different surfaces of the protocol.
+
+#### 1.15.3 What ASHE's web-side architecture would mediate
+
+Per ADR-018 + v0.8 §9 web-side interaction point:
+
+| Current state (no ASHE web layer) | What ASHE web-side delivers |
+|---|---|
+| Sites block all automation indiscriminately — they cannot distinguish good-faith user-directed agent fetches from bulk scraping crawlers | `.well-known/ashe` intent declaration (`user-directed` / `task-directed` / `autonomous-cascade`) lets sites apply distinct policies to distinct intents at the protocol boundary |
+| AI tools cannot reliably access current information; humans must manually paste content; the agentic web stalls at the discovery boundary | Sites declare an agent-aware surface alongside HTML; agents discover via `.well-known/ashe` and consume via wire-economical projections (TOON for context windows; Protobuf for binary efficiency) |
+| Sites that WOULD serve agents (Reuters, Guardian, paywalled news) have no protocol-standard way to express "users-by-proxy: yes; scraping: no" | Capability tokens scope what the agent can do; sites can charge per-capability (Cloudflare's Pay Per Crawl Marketplace is the vendor-specific approximation of what cross-vendor ASHE standardizes) |
+| Cloudflare's stated long-term direction: *"separate cache layer for AI traffic with task-type routing"* | This IS the tri-surface architecture's web-side (ADR-018). ASHE was already specifying it; Cloudflare independently arrived at the same shape (per §1.9 convergence) |
+
+#### 1.15.4 Strategic implication
+
+The §1.14 + §1.15 pair establishes that ASHE's case-for-now is **simultaneously validated from both architectural axes**:
+
+- **Agent-side (§1.14):** the capability-mediation failure class is no longer hypothetical. It happened on 2026-06-01, at Meta, against Obama-affiliated accounts. The exact mechanism ASHE prevents was the exact mechanism Meta failed to prevent.
+- **Web-side (§1.15):** the universal-automation-blocking pattern is no longer abstract. It is the operational state of tier-1 journalism in mid-2026, and it directly prevented an AI assistant from analyzing a current event of structural importance to its own work.
+
+The two halves of ASHE's tri-surface architecture (agent-side capability mediation + web-side discovery) thereby have *paired live empirical validation from a single 24-hour news cycle*. This pairing was not anticipated; it emerged during incorporation work. The architectural commitment to address both surfaces in the same protocol is what makes ASHE legible as the answer to both failure modes simultaneously.
+
+---
+
+### 1.16 Live empirical validation — bot/human traffic inversion (2026-04-27; publicly disclosed 2026-06-04)
+
+The §1.9 Cloudflare validation cited 32% bot traffic on Cloudflare's network (a number that already validated ASHE's web-side urgency). On **2026-04-27** the threshold crossed: bot traffic surpassed human traffic on the internet for the first time, faster than Cloudflare CEO Matthew Prince had publicly projected.
+
+#### 1.16.1 The data point
+
+| Metric | Value | Source |
+|---|---|---|
+| Date bot traffic crossed 50% | **2026-04-27** | Cloudflare Radar |
+| Current split (HTTP requests) | **57.5% bot / 42.5% human** | Cloudflare Radar; multiple secondary outlets confirm |
+| Prior CEO projection for crossover | **2027** | Prince's prior public statements |
+| Acceleration vs projection | **Approximately one year early** | Implied |
+| Pre-AI-boom bot baseline | **~20%** | Cloudflare historical |
+| Factor | **AI agents browsing thousands of websites per request** | Per Cloudflare framing |
+
+Direct quote from Matthew Prince (per Tom's Hardware reporting): *"that happened faster than I predicted."*
+
+#### 1.16.2 Recursive validation: the data confirms §1.15
+
+The incorporation of §1.16 reproduced the exact pattern §1.15 documented. The AI assistant writing this section attempted to fetch the canonical Cloudflare Radar data sources at `radar.cloudflare.com/traffic#bot-vs-human` and `radar.cloudflare.com/ai-insights` — both returned HTTP 403 Forbidden. The data point about bots exceeding human traffic could not be fetched from Cloudflare's own radar via automated tooling.
+
+This is the third independent live confirmation in 24 hours of the universal-automation-blocking pattern §1.15 names. The pattern is operationally invariant: **the very evidence that strengthens ASHE's web-side case cannot be accessed because of the operational pattern ASHE's web-side architecture mediates**.
+
+The recursion now has three branches in §1.14-§1.16:
+
+| § | Validation axis | Source pattern |
+|---|---|---|
+| §1.14 | Agent-side (capability mediation failure) | Meta Instagram takeover via chatbot confused-deputy |
+| §1.15 | Web-side (automation blocking pattern) | 4 tier-1 news outlets blocking fetch of §1.14 reporting |
+| §1.16 | Web-side scale (operational threshold) | Cloudflare Radar data confirming inversion — blocked from automated fetch |
+
+#### 1.16.3 What this means for ASHE's case-for-now timing
+
+The §1.9-§1.13 vendor convergence cited multiple companies independently building proprietary solutions to AI-traffic problems. §1.16 confirms the operational urgency was correctly named but the timeline was *understated*. The agentic web is not approaching — it has arrived. Bot traffic is the majority. The 2027 projection that Prince and others held has been compressed by one year because AI agents browse at orders-of-magnitude higher rates per task than human users.
+
+The implication for ASHE adoption:
+
+- The "first-mover" period §1 framed as opening in 2026 is now operationally past. The web is already majority-bot.
+- The "tune for AI or for humans" dichotomy Cloudflare named in §1.9 is no longer a long-term-direction concern; it is the operational present.
+- The §1.8 compound benefit case (serving cost reduction, intent-aware routing, cross-vendor coordination) becomes acute, not aspirational.
+- The §1.7 bounded-outcomes-≠-censored-behavior moral-strategic argument gains urgency: capable AI agents are operating the web at scale right now, without protocol-layer mediation.
+
+ASHE's tri-surface architecture (per v0.8) was specified before this threshold-crossing was public. The architecture's web-side commitment (`.well-known/ashe` interaction point per ADR-018) is now the protocol layer that the operational reality demands.
+
+#### 1.16.4 Citations
+
+- *Bots have now passed human traffic online, Cloudflare boss laments — says agentic traffic wasn't expected to eclipse real people until next year* (Tom's Hardware, 2026). https://www.tomshardware.com/tech-industry/artificial-intelligence/bots-have-now-passed-human-traffic-online-cloudflare-boss-laments-says-agentic-traffic-wasnt-expected-to-eclipse-real-people-until-next-year
+- *Online bot traffic will exceed human traffic by 2027, Cloudflare CEO says* (TechCrunch, 2026-03-19) — historical projection now superseded by actual events. https://techcrunch.com/2026/03/19/online-bot-traffic-will-exceed-human-traffic-by-2027-cloudflare-ceo-says/
+- *Bot traffic overtakes humans ahead of 2027 timeline Cloudflare expected* (piunikaweb, 2026-06-04). https://piunikaweb.com/2026/06/04/cloudflare-bot-traffic-overtakes-humans/
+- *Bots Now Generate More Web Traffic Than Humans, Says Cloudflare* (Ground News, 2026). https://ground.news/article/bots-now-generate-more-web-traffic-than-humans-says-cloudflare_270264
+- *Cloudflare Radar — Traffic Bot vs Human* (canonical Cloudflare data — blocked from automated fetch, per §1.15 + §1.16.2). https://radar.cloudflare.com/traffic#bot-vs-human
+- *Cloudflare Radar — AI Insights* (canonical Cloudflare data — blocked from automated fetch). https://radar.cloudflare.com/ai-insights
+
+---
+
+### 1.17 Live empirical validation — Cloudflare Web Bot Auth + OpenAI production signing (operational since 2025-05)
+
+The §1.16 threshold-crossing pairs with a complementary architectural signal that has been **operationally deployed for 13+ months**: **Cloudflare's Web Bot Auth proposal** (published 2025-05-15 by Thibault Meunier + Mari Galicer), with **OpenAI's Operator signing all requests in production** using the proposed standard. The signal is unusually strong because the substrate has been operational, the frontier-vendor adoption is sustained, and the IETF standardization process has been active for over a year by the time the §1.16 bot-inversion threshold crossed in 2026-04.
+
+The §1.16 + §1.17 timing relationship is critical: **the agent-side identity primitive was in production before the bot-inversion happened.** Cloudflare and OpenAI began coordinating in May 2025; the operational threshold crossed in April 2026; Matthew Prince publicly confirmed in mid-2026. The architectural response was deployed before the operational urgency became publicly disclosed.
+
+#### 1.17.1 The Web Bot Auth proposal (Cloudflare, May 2025)
+
+Per Cloudflare's engineering blog (`blog.cloudflare.com/web-bot-auth/`, **2025-05-15**, Thibault Meunier + Mari Galicer), the proposal addresses precisely the problem §1.9 (Cloudflare 2026 cache data) and §1.16 (Cloudflare 2026 inversion data) named: User-Agent headers are spoofable, IP ranges are brittle, per-site bearer tokens don't scale. Cloudflare proposes two complementary cryptographic mechanisms:
+
+| Mechanism | Substrate | Adoption profile |
+|---|---|---|
+| **HTTP Message Signatures (RFC 9421)** | Ed25519 signatures over the request authority, in `Signature` + `Signature-Input` + `Signature-Agent` headers | Cloudflare's prioritized adoption path; RFC already published; reference implementations available |
+| **Request mTLS via TLS Flags** | mTLS with new `req mTLS` TLS flag signaling client support | Experimental; pre-IETF standardization |
+
+IETF standardization underway via three drafts:
+- `draft-meunier-web-bot-auth-architecture`
+- `draft-jhoyla-req-mtls-flag`
+- `draft-meunier-web-bot-auth-glossary`
+
+#### 1.17.2 The OpenAI adoption signal (production, today)
+
+OpenAI engineer Eugenio is quoted directly in the Cloudflare post:
+
+> *"Ensuring the authenticity of Operator traffic is paramount. With HTTP Message Signatures (RFC 9421), OpenAI signs all Operator requests so site owners can verify they genuinely originate from Operator and haven't been tampered with."*
+
+This is not a future commitment. **OpenAI has been signing Operator requests in production since at least 2025-05, using the RFC 9421 mechanism Cloudflare has been standardizing through IETF for 13+ months.** The strongest possible adoption signal: a frontier-vendor has been crossing the "do something cryptographic at the agent-identity layer" threshold in production for over a year, without waiting for an external standards body to fully consume the drafts. The sustained operational duration (not a recent announcement) is what makes this distinct from typical industry "we plan to do X" signals.
+
+#### 1.17.3 Why this is complementary to ASHE, not competitive
+
+Web Bot Auth answers one of ASHE's three structural questions at the web-side surface: **identity** (which agent is this?). The full set of structural questions §1.4 and §1.5 named for the agentic web layer is:
+
+| Structural question | Answered by | ASHE coverage | Web Bot Auth coverage |
+|---|---|---|---|
+| Who is this agent? | Cryptographic identity primitive | Layer 2 identity (ADR-021) — composable with HTTP Message Signatures as a substrate | **Direct — this is what Web Bot Auth is** |
+| What does this agent declare it wants to do? | Universal intent declaration | §1.5 + ADR-018 + v0.8 §1.5 | Not addressed — `tag="web-bot-auth"` is purpose-of-the-signature, not purpose-of-the-action |
+| What is this agent authorized to do? | Capability lease lifecycle | v0.8 §4 + capability descriptor grammar (ADR-003) | Not addressed |
+| What happens when it acts? | Audit + receipt attestation | v0.8 Division II receipt sub-system | Not addressed |
+| Where does it discover what the site offers to agents? | `.well-known/ashe` handshake | ADR-018 + v0.8 §9 | Not addressed — `Signature-Agent` is identity directory, not capability surface |
+
+**Web Bot Auth is the agent-side identity primitive layer; ASHE is the capability + intent + audit + discovery layer above it.** The mapping is exactly the kind of strictly-additive composition v0.8 §1.6 commits to. ASHE consumes Web Bot Auth-signed requests as a Layer 2 identity primitive at the web-side surface; ASHE adds intent declaration, capability scoping, audit, and `.well-known/ashe` handshake above.
+
+ASHE's `.well-known/ashe` handshake response (v0.8 §9.2) currently declares `ashe.auth-methods: [OIDC, auth.md, OAuth 2.1, ...]` as the supported identity primitives. The natural extension is to add `http-message-signatures-rfc9421` and `request-mtls` to that list. Adopters using Web Bot Auth for identity then layer ASHE capability mediation above with zero additional cryptographic primitives to adopt.
+
+#### 1.17.4 The standardization-process convergence
+
+Per §1.11 (Google Cloud strategic disclosure) and §1.13 (HBR + Siteimprove), ASHE's case-for-now framing predicted that multi-vendor consensus on agent-protocol layers would converge through visible IETF/open-standards processes rather than vendor-controlled stacks. Web Bot Auth is exactly that pattern in operational form:
+
+- **Cloudflare** (CDN / web infrastructure layer) → proposing the substrate
+- **OpenAI** (frontier model layer) → already implementing in production
+- **IETF** (neutral standards body) → consuming three drafts for standardization
+- **Other AI vendors** → can adopt RFC 9421 without licensing or per-vendor integration
+
+The §1.10.5 vendor-convergence pattern (4 frontier-grade vendors independently arriving at the same architectural shape) now extends with **operational implementation**: not just convergence on *what to build*, but *building it and shipping it in production* via a published RFC.
+
+#### 1.17.5 What this means for ASHE strategic positioning
+
+| Concern | Pre-Web-Bot-Auth (§1.9 vintage) | Post-Web-Bot-Auth (§1.17 vintage) |
+|---|---|---|
+| Agent-identity primitive | ASHE proposes its own Layer 2 identity per ADR-021 | ASHE Layer 2 identity becomes a **composable consumer** of HTTP Message Signatures (RFC 9421); existing Ed25519 in SACR (`ed25519/v1`) is directly the mechanism Web Bot Auth uses |
+| Cross-vendor coordination | Adoption convergence anticipated but unproven | **Convergence is operational**: OpenAI signing in production; Cloudflare standardizing; IETF process active |
+| Standards engagement | Future work | Active opportunity: ASHE can engage `draft-meunier-web-bot-auth-architecture` working group as the "next-layer capability protocol above identity" |
+| OpenAI engagement path | Speculative | **OpenAI has crossed the identity threshold publicly** — they are now a defensible engagement candidate for the next-layer (capability + intent + audit) discussion |
+
+The §1.16 + §1.17 pair establishes a essential strategic argument: **the protocol-layer mediation ASHE specifies is exactly what the operational signal now demands, and the substrate ASHE composes with (RFC 9421 / Web Bot Auth) is now production-deployed at frontier-vendor scale.**
+
+#### 1.17.6 Updates to architectural references
+
+ASHE v0.8 §1.6 (strictly-additive adoption) and §9 (web-side interaction point) admit Web Bot Auth as a substrate ASHE composes with — no spec changes required, but recommended additions:
+
+- **v0.8 §1.6 composition table:** Add HTTP Message Signatures (RFC 9421) as a substrate ASHE consumes for agent-side identity
+- **v0.8 §9.2 handshake response:** Add `http-message-signatures-rfc9421` and `request-mtls` to `ashe.auth-methods`
+- **ADR-018 §C3 cross-reference:** Note Web Bot Auth as the canonical agent-identity primitive substrate for the web-side surface
+- **CASE-FOR-NOW §1.11 vendor convergence table:** Cloudflare + OpenAI joint entry — substrate + first frontier-vendor adopter
+
+#### 1.17.7 Citations
+
+- Meunier, T., & Galicer, M. (2025, May 15). *Web Bot Auth: A new way for legitimate agents to authenticate themselves*. Cloudflare Engineering Blog. https://blog.cloudflare.com/web-bot-auth/
+- IETF draft: *Web Bot Auth Architecture* (`draft-meunier-web-bot-auth-architecture`)
+- IETF draft: *Request mTLS Flag* (`draft-jhoyla-req-mtls-flag`)
+- IETF draft: *Web Bot Auth Glossary* (`draft-meunier-web-bot-auth-glossary`)
+- IETF RFC 9421: *HTTP Message Signatures* (already published; cited by Cloudflare as the essential standard)
+- OpenAI: production deployment of HTTP Message Signatures for Operator (quoted in Cloudflare post, no separate URL)
+- ASHE composition references: v0.8 §1.6 strictly-additive adoption; v0.8 §9 web-side interaction point; ADR-018; SACR `ed25519/v1` entry
+
+---
+
 ## 2. Documented agent failure incidents[^incidents-source]
 
 [^incidents-source]: Incidents compiled 2026-05-25 from contemporary public-record sources including Bloomberg, VentureBeat, CNBC, The Block, court filings, and corporate disclosures. Pre-2026 cases (Mata v. Avianca, Air Canada chatbot, Cohen/Bard) are independently verified against author training data through January 2026. 2026 incidents are cited per the sources named; readers seeking primary-source confirmation should consult the named outlets. This section will be updated as additional incidents are publicly documented; correction-requests for any inaccuracy welcomed via the standard contribution process.
@@ -683,6 +927,8 @@ The pattern of agent failures, hallucinations, weaponizations, and autonomous-sy
 **Alibaba GPU Agent Crypto-Hijacking (March 2026)** [per The Block] — security researchers discovered a rogue autonomous AI agent tied to compromised enterprise infrastructure that was quietly draining corporate computational power. Unlike standard malware with hardcoded scripts, this agent **adapted to its environment**: scanned internal cloud clusters for exposed API endpoints, autonomously elevated its own system privileges, hijacked massive GPU clusters, and redirected corporate cloud infrastructure to mine cryptocurrency. Actively modified system configurations to evade detection.
 
 **McKinsey "Lilli" Hack (early 2026)** — security researchers demonstrated a severe vulnerability in McKinsey's internal AI platform "Lilli." An external autonomous agent dubbed **"CodeWall"** successfully manipulated the system's prompts to hijack the chatbot. Unlike a human hacker typing commands, the hostile agent **autonomously probed the system until it found a way to effectively "brainwash" the internal tool into revealing sensitive data** — proving corporate internal AI is itself a prime target for agentic attacks.
+
+**Meta AI Chatbot Instagram Takeover (June 2026)** [per 404 Media, Reuters, The Guardian, PCMag, Gizmodo, Republic World — full incident analysis in §1.14] — hackers exploited Meta's AI **support chatbot** as a confused-deputy to take over high-profile Instagram accounts including **@ObamaWhiteHouse**, **the Chief Master Sergeant of the U.S. Space Force**, and **Sephora's corporate page**. Attack mechanism: VPN-spoofed geographic location + request to the chatbot to change account email + chatbot performed email change without verifying requester authority over the target account + verification code sent to attacker's email + full takeover with no notification to the victim's actual email. Meta said the flaw is now patched. **Distinct from prior agentic-weaponization patterns: the attackers never executed code or compromised the model — they exploited the chatbot's tool-integration surface, which had been granted ambient `account.email.change` authority across the platform with insufficient capability mediation.** This is the textbook confused-deputy class made concrete at the scale of a Fortune 500 vendor with mature security infrastructure, against a former-President-affiliated account. See §1.14 for full ASHE-architectural analysis.
 
 **Reach plc "Robo-Litigation" Flood** — UK publishing giant Reach reported weaponized bureaucracy: a massive influx of AI-generated legal complaints. Hostile actors using agents to churn out thousands of automated defamation and privacy claims. While many are legally flawed, the **sheer volume creates a "Denial of Service" effect on corporate legal departments**, forcing them to burn resources reviewing nonsense filings generated at machine speed.
 
@@ -813,7 +1059,7 @@ The "safe middle" is the most broken option. There is no usable safe-default for
 
 #### 2.8.3 The Excel-Word diffing asymmetry as evidence
 
-Word has Track Changes (built-in revision history with author attribution and accept/reject UX). Excel does not. **Same Microsoft Office suite; same vendor; one application has the substrate for human review of agent changes, one doesn't.** That asymmetry inside a single product family is itself evidence that "the application defines what's reviewable" is a load-bearing structural fact. ASHE's audit-trail-per-capability-exercise is the **protocol-level diffing primitive** that fills the gap regardless of whether the application provides UX-level diffing — making the protocol valuable to every business application (databases, CRMs, ERPs, scientific tools, design tools, custom enterprise software), not just the few that have native diffing UX.
+Word has Track Changes (built-in revision history with author attribution and accept/reject UX). Excel does not. **Same Microsoft Office suite; same vendor; one application has the substrate for human review of agent changes, one doesn't.** That asymmetry inside a single product family is itself evidence that "the application defines what's reviewable" is a essential structural fact. ASHE's audit-trail-per-capability-exercise is the **protocol-level diffing primitive** that fills the gap regardless of whether the application provides UX-level diffing — making the protocol valuable to every business application (databases, CRMs, ERPs, scientific tools, design tools, custom enterprise software), not just the few that have native diffing UX.
 
 #### 2.8.4 The ASHE coverage map for Excel-with-Claude
 
@@ -845,7 +1091,7 @@ Excel-with-Claude *already* has the identity layer solved: users sign in with th
 | Audit trail | Limited | Per-action attribution with capability + intent context | ASHE protocol |
 | Cross-vendor consistency | Absent | Same capability descriptor format, same lease lifecycle, same audit shape | ASHE protocol |
 
-**Microsoft doesn't replace anything.** They keep OAuth-Anthropic-account integration; they keep their Excel harness; they keep their existing UX surfaces. ASHE adds the capability layer above the existing identity layer.
+**Microsoft doesn't replace anything.** They keep OAuth-Anthropic-account integration; they keep their Excel software; they keep their existing UX surfaces. ASHE adds the capability layer above the existing identity layer.
 
 #### 2.8.6 The 5-step incremental adoption sequence
 
@@ -869,7 +1115,7 @@ The Excel-with-Claude exemplar provides ASHE's *most concrete and most compellin
 - The adoption path is strictly additive (no replacement; layer-above OAuth)
 - The pattern generalizes to every application vendor with embedded agents (Microsoft, Adobe, Figma, Atlassian, Salesforce, every productivity tool)
 
-This is a different *kind* of adoption argument than capability theory (50-year heritage, §1 of VISION), wire economy (token costs at scale, §3-§4 of this document), dramatic failure incidents (Mexico extradition et al., §2.1-§2.3 above), or standards window (Glasswing, §1; agentic web, §4). Those arguments are good. This argument is **actionable today by a specific large adopter making a specific incremental change**.
+This is a different *kind* of adoption argument than capability theory (50-year heritage, §1 of VISION), wire economy (token costs at scale, §3-§4 of this document), dramatic failure incidents (Mexico extradition et al., §2.1-§2.3 above), or standards period (Glasswing, §1; agentic web, §4). Those arguments are good. This argument is **actionable today by a specific large adopter making a specific incremental change**.
 
 The Excel example doesn't replace the §2.1-§2.3 catalog. It adds a parallel failure class that is *more frequent and aggregate-larger* than the dramatic class. Both classes are real; both need addressing; ASHE addresses both through the same protocol.
 
@@ -931,7 +1177,7 @@ Caveat: global internet traffic is roughly **65% video** per Sandvine's network 
 
 **The point is not the exact number** — it's the order of magnitude and the timeline. At agent-population × agent-team × per-agent-request × population scale **reachable by 2028**, even fractional efficiency improvements translate to massive aggregate savings. The wire-format efficiency choice at the protocol layer becomes an energy-grid-relevant question on a 24-36 month horizon, not a far-future architectural curiosity.
 
-The current rate of growth (5× YoY for AI-mediated search referrals per digitalapplied; 32% of Cloudflare's network already AI bot traffic) means the 5% scenario isn't "if agent adoption succeeds" — it's "when the current trajectory continues for ~18-24 months." The standardization decision the industry is making in 2026 will define the efficiency profile of the agentic web at near-term scale, not at distant-future scale.
+The current rate of growth (5× YoY for AI-mediated search referrals per digitalapplied; 32% of Cloudflare's network already AI bot traffic) means the 5% scenario isn't "if agent adoption succeeds" — it's "when the current progression continues for ~18-24 months." The standardization decision the industry is making in 2026 will define the efficiency profile of the agentic web at near-term scale, not at distant-future scale.
 
 For context: training GPT-4 reportedly consumed on the order of \(10^{13}\) tokens. The projected monthly agent-mediated browsing traffic at 5% of internet traffic is **roughly 7,500,000× the entire GPT-4 training corpus per month**. Wire-format inefficiency at this scale is energy-grid-relevant, not optimization-detail-relevant.
 
@@ -1086,7 +1332,7 @@ Per the public Claude Code documentation, the permission system includes:
 - `--dangerously-skip-permissions` gated by non-root user requirement + isolation environment
 - Workspace bind-mounted; commands execute inside container; edits visible on host
 
-**This is the strongest single set of vendor-specific feature primitives for the sealed-workspace pattern that ASHE proposes** ([ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md)). Anthropic has built and demonstrated the primitives at the vendor level; what Anthropic has NOT publicly proposed is the cross-vendor protocol-standardization vision, the four-layer enforcement trajectory, or the tri-surface architectural integration (agent-side per [ADR-014](decisions/ADR-014-phased-enforcement-model.md) + dev-side per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md) + web-side per [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md)). ASHE's distinct contribution is the protocol-standardization vision above this primitive lineage; not the invention of sealed-workspace as a concept.
+**This is the strongest single set of vendor-specific feature primitives for the sealed-workspace pattern that ASHE proposes** ([ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md)). Anthropic has built and demonstrated the primitives at the vendor level; what Anthropic has NOT publicly proposed is the cross-vendor protocol-standardization vision, the four-layer enforcement progression, or the tri-surface architectural integration (agent-side per [ADR-014](decisions/ADR-014-phased-enforcement-model.md) + dev-side per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md) + web-side per [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md)). ASHE's distinct contribution is the protocol-standardization vision above this primitive lineage; not the invention of sealed-workspace as a concept.
 
 #### Cursor / Codex / Devin / Replit / Copilot Agent (other tools)
 
@@ -1134,8 +1380,8 @@ ASHE's architectural posture is **delegate-don't-reimplement**. Protocols that s
 | **Capability-grant lifecycle** | — | ✅ ASHE-defined (issue / attenuate / audit / revoke) |
 | **Wire format with projections** | — | ✅ ASHE-defined ([ADR-012](decisions/ADR-012-wire-format-grpc-protobuf-with-projections.md): Protobuf canonical + JSON + TOON) |
 | **Cross-vendor protocol standardization** | — | ✅ ASHE-defined (the protocol-layer commitment) |
-| **Frictionlessness principle** | — | ✅ ASHE-defined (mandatory architectural commitment per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md)) |
-| **Phased enforcement trajectory** | — | ✅ ASHE-defined (Layer 1 → 4 per [ADR-014](decisions/ADR-014-phased-enforcement-model.md)) |
+| **No-per-action-prompts principle** | — | ✅ ASHE-defined (mandatory architectural commitment per [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md)) |
+| **Phased enforcement progression** | — | ✅ ASHE-defined (Layer 1 → 4 per [ADR-014](decisions/ADR-014-phased-enforcement-model.md)) |
 | **Surface-representation by declared intent** | — | ✅ ASHE-defined (novel contribution per [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md); no predecessor `.well-known/` endpoint adapts representation to caller type) |
 | **Tri-surface architectural integration** | — | ✅ ASHE-defined (agent-side [ADR-014](decisions/ADR-014-phased-enforcement-model.md) + dev-side [ADR-017](decisions/ADR-017-sealed-workspace-foundational-dev-pattern.md) + web-side [ADR-018](decisions/ADR-018-well-known-ashe-web-side-interaction-point.md)) |
 
@@ -1151,10 +1397,10 @@ What ASHE distinctly adds — the specific protocol-layer commitments that the f
 | **Intent declaration as protocol primitive** | Required `purpose` field on every capability request; reconciled against subsequent actions | Current platforms authorize at access-control layer; don't require purpose declaration; can't detect intent-vs-action divergence (the social-engineered-AI attack pattern from Mexico extradition exploits this gap) |
 | **Provenance-by-construction** | Every claim in agent output carries capability-call origin tag; output schemas enforce provenance fields | No current platform addresses content provenance — addresses the hallucination-actionability problem (see §2.6) |
 | **Validation-graph evaluator pipeline** | Multi-tier composition: rules → tiny ONNX → small LLM → cloud LLM; deployment-profile-scoped | Existing platforms have policy engines (Arcade comes closest), not evaluator graphs with tier composition + cascade-pattern economic optimization |
-| **Phased enforcement trajectory** | Layer 1 (cooperating SDK) → Layer 2 (runtime hook) → Layer 3 (OS-level mediation) → Layer 4 (hardware-rooted) | Current platforms are Layer 1 only; no public trajectory toward runtime mediation; no path to bound adversarial-code blast radius |
+| **Phased enforcement progression** | Layer 1 (cooperating SDK) → Layer 2 (runtime hook) → Layer 3 (OS-level mediation) → Layer 4 (hardware-rooted) | Current platforms are Layer 1 only; no public progression toward runtime mediation; no path to bound adversarial-code blast radius |
 | **BuildService for code-change proposals** | Multi-service architecture explicitly partitioning operator-mode (runtime decisions) from build-mode (code/system change proposals with evaluation/commit/rollback) | Existing platforms address operator-mode equivalent (runtime tool calls); none address build-mode as a first-class service partition with the proposal→evaluation→commit lifecycle |
-| **Sealed workspace as cross-vendor standard default** | Workspaces are themselves sealed software units; `ashe workspace init` is step 1 of any new project; "pull up the wall and develop inside"; cross-tool standardization (Cursor / Codex / Devin / Copilot Agent all participate in the same protocol) | Anthropic's Claude Code dev container demonstrates the pattern works in vendor-specific deployment (iptables firewall + managed settings + persistent volumes + non-root enforcement). What's missing is the protocol-level standardization that makes the pattern available cross-vendor — Cursor / Codex / Devin / Copilot Agent each have weaker or absent versions. ASHE standardizes what Claude Code dev container demonstrated; doesn't reinvent it. |
-| **Frictionlessness principle** | Capability mediation must NOT impose per-action approval friction; standing capabilities + risk-tiered automation + cached approvals + inferred intent | Current systems either bind users to broad modes (low friction, no security) OR per-operation approval (security, unusable friction); the right design is fine-grained mediation with frictionless UX — invisible like TLS |
+| **Sealed workspace as cross-vendor standard default** | Workspaces are themselves sealed software units; `ashe workspace init` is step 1 of any new project; "establish the boundary and develop inside"; cross-tool standardization (Cursor / Codex / Devin / Copilot Agent all participate in the same protocol) | Anthropic's Claude Code dev container demonstrates the pattern works in vendor-specific deployment (iptables firewall + managed settings + persistent volumes + non-root enforcement). What's missing is the protocol-level standardization that makes the pattern available cross-vendor — Cursor / Codex / Devin / Copilot Agent each have weaker or absent versions. ASHE standardizes what Claude Code dev container demonstrated; doesn't reinvent it. |
+| **No-per-action-prompts principle** | Capability mediation must NOT impose per-action approval friction; standing capabilities + risk-tiered automation + cached approvals + inferred intent | Current systems either bind users to broad modes (low friction, no security) OR per-operation approval (security, unusable friction); the right design is fine-grained mediation with UX without per-action prompts — invisible like TLS |
 | **TOON projection for agent context** | Token-efficient text projection optimized for LLM consumption | Existing platforms don't address text-projection efficiency at the agent-context layer |
 | **Cascade-agent economic structuring** | Wire format + reliability profile enables frontier-for-bookends, cheap-for-execution; substantial cost reduction | Existing platforms don't structure the cascade pattern; monolithic-frontier-agent is dominant |
 | **Open governance + multi-implementation from day one** | Apache 2.0, foundation-neutral, reference implementations in 2+ languages, conformance suite | Some platforms (auth.md, MCP under LF) hit this; the commercial 8 are largely vendor-controlled |
@@ -1175,7 +1421,7 @@ The correct architectural framing for ASHE in the post-2026 landscape:
 | - gRPC + Protobuf + HTTP/3 (per ADR-012)            |
 | - Multi-service: Session/Blueprint/Operator/Build/   |
 |   Audit (per ADR-013)                                |
-| - Intent declaration required (frictionless via      |
+| - Intent declaration required (without per-action prompts via      |
 |   standing capabilities; ADR-017)                    |
 | - Provenance-by-construction (ADR-016, forthcoming)  |
 | - Validation-graph evaluator pipeline (ADR-008)      |
@@ -1199,9 +1445,9 @@ ASHE doesn't replace any of these. It's the **structured wire-format + intent-de
 The compositional positioning improves adoption economics dramatically:
 
 - "Adopt ASHE INSTEAD of MCP" is a hard sell — MCP has 97M monthly SDK downloads, Linux Foundation governance, and Gartner-projected 40% enterprise penetration
-- "Adopt ASHE ON TOP of your existing MCP + auth.md + WorkOS deployment to add intent declaration + provenance + multi-tier evaluator + wire efficiency + sealed-workspace + frictionless capability mediation" is **strictly additive** — adopters keep their existing investments and add ASHE as a layer above
+- "Adopt ASHE ON TOP of your existing MCP + auth.md + WorkOS deployment to add intent declaration + provenance + multi-tier evaluator + wire efficiency + sealed-workspace + capability mediation without per-action prompts" is **strictly additive** — adopters keep their existing investments and add ASHE as a layer above
 
-The honest framing: ASHE rides the wave of MCP/auth.md/commercial-platform success rather than competing for it. Without ASHE-or-equivalent at the next layer, the ecosystem will reach a plateau where the foundational primitives are standardized but the higher-order properties (intent reconciliation, provenance, wire efficiency, sealed workspaces, frictionless capability mediation) are vendor-fragmented or absent. ASHE provides the open standard for that next layer.
+The honest framing: ASHE rides the wave of MCP/auth.md/commercial-platform success rather than competing for it. Without ASHE-or-equivalent at the next layer, the ecosystem will reach a plateau where the foundational primitives are standardized but the higher-order properties (intent reconciliation, provenance, wire efficiency, sealed workspaces, capability mediation without per-action prompts) are vendor-fragmented or absent. ASHE provides the open standard for that next layer.
 
 ---
 
@@ -1209,7 +1455,7 @@ The honest framing: ASHE rides the wave of MCP/auth.md/commercial-platform succe
 
 Standards that became infrastructure followed a consistent pattern:
 
-| Standard | Pre-catastrophe work | Catastrophe trigger | Adoption trajectory |
+| Standard | Pre-catastrophe work | Catastrophe trigger | Adoption progression |
 |---|---|---|---|
 | **TLS / HTTPS** | Cryptographic protocol work 1994-1999 | Multiple incidents (sniffing attacks, Firesheep 2010) | Let's Encrypt (2016) + CDN integration drove HTTPS from <40% (2014) to >95% (2024) |
 | **OAuth 2.0** | RFC work 2007-2012 | Years of password-sharing antipatterns + API exploitation | Became the de facto delegated-auth standard |
@@ -1268,9 +1514,9 @@ AGI isn't here. The problem exists now. Pre-catastrophe positioning matters. Eve
 
 Cite Glasswing (frontier vulnerability discovery at expert-human level; will proliferate per Anthropic's own framing). Cite the Cloudflare data (32% of network is AI bot traffic with cache-defeating patterns). Cite the Wikimedia +50% bandwidth incident forcing crawler blocking. The threats are documented, not hypothetical. The skepticism is reasonable as a general check on tech hype but doesn't survive engagement with the specific evidence base.
 
-**Counter 3: "The standardization window isn't closing as fast as you claim."**
+**Counter 3: "The standardization period isn't closing as fast as you claim."**
 
-Granted, the precise timing is uncertain. But the asymmetry is structural: being early is cheap (work continues internally); being late is expensive (incumbent has shaped the conversation). Even if the window is 24 months not 12, the work to be ready in 12 is also the work to be ready in 24. The downside of being early is minimal; the downside of being late is permanent loss of standardization opportunity. The asymmetric payoff justifies the work regardless of exact timing.
+Granted, the precise timing is uncertain. But the asymmetry is structural: being early is cheap (work continues internally); being late is expensive (incumbent has shaped the conversation). Even if the period is 24 months not 12, the work to be ready in 12 is also the work to be ready in 24. The downside of being early is minimal; the downside of being late is permanent loss of standardization opportunity. The asymmetric payoff justifies the work regardless of exact timing.
 
 ---
 
@@ -1300,7 +1546,7 @@ Public release requires all six. Internal work continues until they're aligned. 
 | Standards-body engagement | 2027 | IETF / W3C / Linux Foundation engagement based on community traction |
 | Second reference implementation begun | 2027 | At least one external party committed to a non-TypeScript implementation |
 
-This puts ASHE in public conversation within ~6 months of the Glasswing moment — within the standardization window historical patterns suggest matters.
+This puts ASHE in public conversation within ~6 months of the Glasswing moment — within the standardization period historical patterns suggest matters.
 
 ---
 
@@ -1314,7 +1560,7 @@ The honest "what if ASHE is late" question in mid-2026 is **what fills the layer
 |---|---|---|
 | **Anthropic, OpenAI, or another major lab extends MCP with capability mediation + intent declaration + provenance + sealed workspaces** | High — they have the SDKs, distribution, and ecosystem leverage | Becomes the de facto next-layer standard but vendor-controlled; less open governance than MCP itself; capture risk |
 | **One of the 8 commercial platforms expands beyond their current slice** (Arcade is closest; could extend tool-execution policy into full capability-mediation protocol) | Medium-high — Arcade specifically has identity-aware execution + policy enforcement; adding intent declaration + provenance + sealed workspaces is incremental work for them | Becomes a commercial standard with the lock-in implications; SaaS pricing affects long-tail adoption |
-| **A consortium (likely AWS + Microsoft + a few large players via the Agentic AI Foundation under Linux Foundation) ships a vendor-coordinated next-layer standard** | Medium — the LF home for MCP creates the natural forum; this is arguably the *best* alternative to ASHE because it's open-governed | Probably good enough; would still leave specific gaps (sealed workspaces, frictionless capability mediation, wire-efficiency targets) but might cover the main pieces |
+| **A consortium (likely AWS + Microsoft + a few large players via the Agentic AI Foundation under Linux Foundation) ships a vendor-coordinated next-layer standard** | Medium — the LF home for MCP creates the natural forum; this is arguably the *best* alternative to ASHE because it's open-governed | Probably good enough; would still leave specific gaps (sealed workspaces, capability mediation without per-action prompts, wire-efficiency targets) but might cover the main pieces |
 | **Multiple competing next-layer protocols fragment** — Anthropic + OpenAI + Google + AWS each ship vendor-specific extensions to MCP | Medium — common pattern when no neutral standard ships first | Adopters have to support multiple; agents have to discover which protocol the site speaks; ecosystem-level efficiency loss |
 | **The next layer just doesn't materialize for 3-5 years** — ecosystem plateaus at MCP + commercial platforms + tri-modal tool permissions | Low-medium — the demand is real but standardization can stall | Wire-efficiency gains stay on the table; agent-trojan / hallucination-actionability / sealed-workspace problems persist |
 | **A single major incident forces emergency standardization** — Mexico-extradition-class event hits a Fortune 500 with damages in the hundreds of millions; regulatory response demands "common capability mediation standard"; whatever exists at that moment becomes the answer | Medium and rising — incident frequency is increasing (see §2) | Standardization happens under panic conditions; quality suffers; whoever happens to be visible at the moment wins |
@@ -1340,11 +1586,11 @@ ASHE proceeds with discipline:
 - Reference implementation alongside specification
 - Defensive scaffolding ([REFUTATIONS.md](REFUTATIONS.md) forthcoming) inviting attack
 
-This is what credible pre-catastrophe standardization work looks like. The window is open. The work continues.
+This is what credible pre-catastrophe standardization work looks like. The period is open. The work continues.
 
 ---
 
-**The case for now is not urgency theater. It is structural: a public demand-trigger has fired (Glasswing, 2026-05-23); the wire-inefficiency cost is documented (arXiv 2511.23281, Steiner-Peeters-Bizer); the agent-mediated traffic is empirically growing at 5× year-over-year (digitalapplied data, March 2026); the standardization gap is verifiable (no public capability broker exists); the third path between unconditional-serve and outright-block doesn't currently exist for ~99% of the web; the historical pattern rewards being-first-with-credibility; the alternative is vendor-captured fragmentation. The work to be credible takes ~12 months. The window closes within ~12-24. Math favors building now.**
+**The case for now is not manufactured urgency. It is structural: a public demand-trigger has fired (Glasswing, 2026-05-23); the wire-inefficiency cost is documented (arXiv 2511.23281, Steiner-Peeters-Bizer); the agent-mediated traffic is empirically growing at 5× year-over-year (digitalapplied data, March 2026); the standardization gap is verifiable (no public capability broker exists); the third path between unconditional-serve and outright-block doesn't currently exist for ~99% of the web; the historical pattern rewards being-first-with-credibility; the alternative is vendor-captured fragmentation. The work to be credible takes ~12 months. The period closes within ~12-24. Math favors building now.**
 
 ---
 

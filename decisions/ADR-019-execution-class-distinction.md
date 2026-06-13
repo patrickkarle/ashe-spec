@@ -326,7 +326,7 @@ Per the observational pattern (2026-05-27), each class has a different integrati
 |-------|---------------|---------------------------------------|
 | **provider-call** | Exists as descriptive metadata only (cataloging 7 providers); not integrated into active execution path | v0 may or may not surface as a third execution path; if not landed, v1 addition under same lease-discipline framing |
 | **agent-worker** | **De facto current class**. The primary dispatch implementation is worker-shaped: bounded SDK call per composition node, non-persistent session, role-tool bundles (per role definitions such as IMPLEMENTER / REVIEWER / VALIDATOR). **Critical caveat**: current dispatch uses permissive SDK environment configuration — the safety boundary today is the configured SDK environment + role tool list, **NOT ASHE mediation**. | v0 brings this de facto class under explicit lease discipline: bounded task lease replaces SDK-environment-only safety; capability checks gate operations through the protocol-layer enforcer; audit captures actions per the protocol-layer audit logger |
-| **occupant** | **Does not exist** in the active execution path today. Reference-implementation design proposes the v0 introduction. | v0 introduces occupant as a first-class concept with admission ceremonies, standing lease per role per [ADR-017](ADR-017-sealed-workspace-foundational-dev-pattern.md), frictionlessness mechanisms per [ADR-017](ADR-017-sealed-workspace-foundational-dev-pattern.md) Commitment 2 |
+| **occupant** | **Does not exist** in the active execution path today. Reference-implementation design proposes the v0 introduction. | v0 introduces occupant as a first-class concept with admission ceremonies, standing lease per role per [ADR-017](ADR-017-sealed-workspace-foundational-dev-pattern.md), no-per-action-prompt mechanisms per [ADR-017](ADR-017-sealed-workspace-foundational-dev-pattern.md) Commitment 2 |
 
 Kernel reference implementation primitives are tested as standalone components but **NOT YET wired into the active dispatch execution path** in the reference deployment.
 
@@ -451,7 +451,7 @@ If working-code validation reveals the three-class pattern (or the phor-scoped g
 - [ADR-003](ADR-003-invariant-language.md) — Capability descriptor grammar (lease per class uses this grammar)
 - [ADR-013](ADR-013-multi-service-architecture.md) — Multi-service architecture
 - [ADR-014](ADR-014-phased-enforcement-model.md) — Phased enforcement
-- [ADR-017](ADR-017-sealed-workspace-foundational-dev-pattern.md) — Sealed-workspace + frictionlessness + role templates (ADR-019 requires amendment to ADR-017's role-template table)
+- [ADR-017](ADR-017-sealed-workspace-foundational-dev-pattern.md) — Sealed-workspace + no-per-action-prompt mechanisms + role templates (ADR-019 requires amendment to ADR-017's role-template table)
 - [ADR-018](ADR-018-well-known-ashe-web-side-interaction-point.md) — `.well-known/ashe` web-side interaction-point convention (intent surfaces orthogonal to execution classes)
 - ADR-020 (forthcoming) — Vulnerability advisory propagation + emergency lease attenuation (per-class attenuation behavior will be specified per class + per phor-scoped governance frame)
 

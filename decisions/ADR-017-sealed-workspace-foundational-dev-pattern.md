@@ -6,7 +6,7 @@
 | Date | 2026-05-26 |
 | Decider | PK + Claude |
 | Touches | reference-arch (primary), protocol (sealed-workspace operations become first-class service surfaces) |
-| Cited by | VISION.md §4 (sealed-workspaces subsection); MANIFESTO.md ("pull up the wall, then develop inside"); CASE-FOR-NOW.md §7.3 (contrast with tri-modal current state); ADR-018 (peer convention — `.well-known/ashe` is the web-side surface; ADR-017 is the dev-side surface) |
+| Cited by | VISION.md §4 (sealed-workspaces subsection); MANIFESTO.md (establish-the-boundary-then-develop-inside pattern); CASE-FOR-NOW.md §7.3 (contrast with tri-modal current state); ADR-018 (peer convention — `.well-known/ashe` is the web-side surface; ADR-017 is the dev-side surface) |
 | Builds on | ADR-007 (interception-chain pattern), ADR-008 (validation graph), ADR-013 (multi-service architecture, including BuildService), ADR-014 (phased enforcement) |
 
 ## Context
@@ -36,7 +36,7 @@ The convergent pattern is **mode-based directory scoping**. This is NOT capabili
 - **No cross-tool consistency**: every vendor reinvents permission UX
 - **No cascade attenuation**: agent-spawning-agent inherits parent's full mode
 
-When the agentic-AI weaponization cases happen (Mexico National Data Extradition / Alibaba GPU crypto-hijacking / McKinsey "Lilli" hack / Anthropic Claude Code nation-state breach — see [CASE-FOR-NOW.md §2.2](../CASE-FOR-NOW.md#22-agentic-weaponization)), the contributing factor is often the per-vendor permission model being insufficient OR the agent operating outside any cooperating permission model entirely. The development workflow needs a cross-vendor structural alternative: **the wall goes up first; development happens inside the wall; the same protocol works across every tool**.
+When the agentic-AI weaponization cases happen (Mexico National Data Extradition / Alibaba GPU crypto-hijacking / McKinsey "Lilli" hack / Anthropic Claude Code nation-state breach — see [CASE-FOR-NOW.md §2.2](../CASE-FOR-NOW.md#22-agentic-weaponization)), the contributing factor is often the per-vendor permission model being insufficient OR the agent operating outside any cooperating permission model entirely. The development workflow needs a cross-vendor structural alternative: **the boundary is established first; development happens inside it; the same protocol works across every tool**.
 
 ### Anthropic's Claude Code dev container as prior art — primitive precedent, not vision precedent
 
@@ -56,13 +56,13 @@ What ASHE distinctly contributes — **none of which Anthropic has publicly prop
 - **Cross-vendor protocol standardization**: the same sealed-workspace protocol works across Cursor, Codex, Devin, Copilot Agent, Continuum's own tools, and future agentic-dev tools — not as a vendor product feature but as a published, conformance-tested cross-vendor protocol
 - **Capability protocol layer above the isolation substrate**: capabilities are first-class protocol objects (per [ADR-003](ADR-003-invariant-language.md)), not vendor-specific permission rules; the protocol grammar is uniform across implementations
 - **Universal intent declaration**: intent is a protocol-level primitive declared at the broker boundary (per VISION §6), not a vendor-specific UX pattern
-- **Four-layer phased enforcement trajectory**: Layer 1 cooperating SDK → Layer 2 runtime hook → Layer 3 OS-level mediation → Layer 4 hardware-rooted (per [ADR-014](ADR-014-phased-enforcement-model.md)). Anthropic's primitives reach Layer 1 (cooperating SDK) and a slice of Layer 3 (the sandboxed Bash tool via Seatbelt/bubblewrap, the dev container's iptables firewall); ASHE's vision commits to the full trajectory through Layer 4 (hardware-rooted)
+- **Four-layer phased enforcement progression**: Layer 1 cooperating SDK → Layer 2 runtime hook → Layer 3 OS-level mediation → Layer 4 hardware-rooted (per [ADR-014](ADR-014-phased-enforcement-model.md)). Anthropic's primitives reach Layer 1 (cooperating SDK) and a slice of Layer 3 (the sandboxed Bash tool via Seatbelt/bubblewrap, the dev container's iptables firewall); ASHE's vision commits to the full progression through Layer 4 (hardware-rooted)
 - **Provenance-by-construction extending the audit trail**: every capability exercise carries provenance (per ADR-016 forthcoming); not a Claude Code feature today
 - **Tri-surface coherence**: the sealed-workspace pattern is the dev-side surface of ASHE's tri-surface architecture (agent-side per [ADR-014](ADR-014-phased-enforcement-model.md), dev-side per this ADR, web-side per [ADR-018](ADR-018-well-known-ashe-web-side-interaction-point.md)). Anthropic ships individual primitives; the tri-surface architectural integration is not what Anthropic publicly proposes
 
 The relationship is the protocol-design pattern that has worked historically: shared parts, different thing. Tesla and a Model T share wheels, windshields, and steering wheels — same lineage, different vehicle because intent and scope differ. TCP/IP shared packet-switching primitives with ARPANET and CYCLADES; HTTP shared hypertext primitives with Xanadu; OAuth shared session-token primitives with Twitter's internal auth. Each protocol's contribution was the *integration into a cross-vendor standard with specific intent and scope*, not the invention of new primitives.
 
-The dev container is feature precedent at the level of an isolated environment with managed settings; ASHE's contribution includes the protocol-standardization vision, the cross-tool default, the four-layer enforcement trajectory, and the capability protocol layer above the isolation substrate — none of which Anthropic has publicly proposed as protocol-standardization commitments. The dev container is the isolation substrate; ASHE is the capability protocol that composes above it (per Commitment 4 below).
+The dev container is feature precedent at the level of an isolated environment with managed settings; ASHE's contribution includes the protocol-standardization vision, the cross-tool default, the four-layer enforcement progression, and the capability protocol layer above the isolation substrate — none of which Anthropic has publicly proposed as protocol-standardization commitments. The dev container is the isolation substrate; ASHE is the capability protocol that composes above it (per Commitment 4 below).
 
 ## Decision
 
@@ -80,9 +80,9 @@ The dev container is feature precedent at the level of an isolated environment w
 
 After `ashe workspace init`, all access to workspace contents (file reads, file writes, subprocess execution, network calls, VCS operations, deploy operations) goes through ASHE capability mediation. Raw filesystem access from outside the workspace's exposed capability surface is structurally prevented at the chosen enforcement layer (see ADR-014 Layer 1 through Layer 4).
 
-### Commitment 2: Frictionlessness principle is mandatory
+### Commitment 2: No-per-action-prompts principle is mandatory
 
-**Capability mediation MUST NOT impose per-action approval friction.** Per-operation user prompts kill adoption and undermine the entire pattern. The mechanisms that deliver frictionless UX while maintaining fine-grained mediation:
+**Capability mediation MUST NOT impose per-action approval prompts.** Per-operation user prompts kill adoption and undermine the entire pattern. The mechanisms that deliver UX without per-action prompts while maintaining fine-grained mediation:
 
 | Mechanism | What it does |
 |-----------|-------------|
@@ -95,9 +95,9 @@ After `ashe workspace init`, all access to workspace contents (file reads, file 
 | **Capability inheritance through cascades** | Agent spawning sub-agents inherits attenuated capabilities; no fresh approval per child agent |
 | **Inferred intent** | When action patterns are unambiguous (e.g., sequence of read-foo.js / edit-foo.js / test-foo.test.js reads as "iterating on foo.js"), no explicit declaration required |
 
-The right user/developer experience: ASHE-sealed-workspace feels like normal development with capability mediation running invisibly underneath. Approval prompts are *rare* and reserved for high-stakes operations (production deploys, secret access, capability escalation, irreversible destruction). The architectural analogy is **TLS for the agent layer** — nobody approves every byte sent over an encrypted connection.
+The right user/developer experience: ASHE-sealed-workspace feels like normal development with capability mediation running invisibly underneath. Approval prompts are *rare* and reserved for high-stakes operations (production deploys, secret access, capability escalation, irreversible destruction). The per-operation mediation runs without user interaction; the user is unaware of it.
 
-A sealed-workspace implementation that imposes per-action approval friction violates this commitment and is non-conformant.
+A sealed-workspace implementation that imposes per-action approval prompts violates this commitment and is non-conformant.
 
 ### Commitment 3: Role-based capability sets are first-class
 
@@ -112,7 +112,7 @@ The sealed workspace exposes standard capability templates per role:
 | **ai-agent (default)** | Subset of developer; explicit task intent required; declared task scope; time-bounded session; capability cascade for spawned sub-agents; audit per action |
 | **ai-agent (constrained)** | `code.read` only by default; per-task capability expansion via explicit grant; suitable for untrusted-model evaluation, prompt-injection-defense scenarios |
 
-Roles are extensible; deployments define additional roles (security-auditor, compliance-officer, etc.) with appropriate capability templates. The role + capability template machinery is what makes the frictionlessness principle achievable — standing capabilities are granted by role, not negotiated per action.
+Roles are extensible; deployments define additional roles (security-auditor, compliance-officer, etc.) with appropriate capability templates. The role + capability template machinery is what makes the no-per-action-prompts principle achievable — standing capabilities are granted by role, not negotiated per action.
 
 ### Commitment 4: Composition with existing isolation primitives is structural
 
@@ -121,7 +121,7 @@ Sealed-workspace does NOT replace DevContainers, GitHub Codespaces, Replit, GitP
 | Layer | Provided by | What it does |
 |-------|-------------|-------------|
 | **Isolation substrate** | DevContainer / gVisor / Firecracker / WASM runtime / OS sandbox / etc. | Enforces process / filesystem / network isolation at the OS or runtime layer |
-| **Capability protocol** | ASHE | Mediates *what* can happen inside the isolation; protocol-level audit, intent declaration, multi-tier evaluator, frictionlessness mechanisms |
+| **Capability protocol** | ASHE | Mediates *what* can happen inside the isolation; protocol-level audit, intent declaration, multi-tier evaluator, no-per-action-prompts mechanisms |
 | **Identity + auth substrate** | auth.md / OAuth 2.1 / OIDC / WorkOS / Auth0 / etc. | Establishes who the actor is; provides credentials |
 | **Tool catalog substrate** | MCP / vendor-specific tool definitions | Discovers what operations are exposed |
 
@@ -148,7 +148,7 @@ ASHE-sealed-workspace orchestrates these substrates. Adopters keep their existin
 
 **What becomes possible**:
 
-- **Frictionless capability mediation at developer-workflow scale**: the pattern that "TLS for the agent layer" is the architectural analogy — mediation invisible most of the time; explicit only at risk boundaries
+- **Capability mediation without per-action prompts at developer-workflow scale**: mediation runs without user interaction most of the time; explicit only at risk boundaries
 - **Cross-organization capability federation**: capability tokens issued by one organization can be presented to another (when trust + policy allow); enables agent-mediated cross-org collaboration with bounded blast radius
 - **Capability-based monetization for development tools**: tools can charge per high-value capability use rather than per-seat licensing; new revenue models become feasible
 - **Reproducible-by-construction development**: capability set + intent declaration + audit trail makes every development action reproducible; debugging "what did this agent do?" becomes mechanical
@@ -160,7 +160,7 @@ ASHE-sealed-workspace orchestrates these substrates. Adopters keep their existin
 - Agent-spawning-agent full-trust inheritance (cascade attenuation is structural)
 - "Full Access" mode that gives the agent everything the user has (replaced by explicit capability sets per role + task)
 - Mode-based directory scoping pretending to be capability mediation (the protocol level rejects this approach)
-- Per-action approval prompts as the security UX (frictionlessness principle forbids this)
+- Per-action approval prompts as the security UX (no-per-action-prompts principle forbids this)
 
 ## Alternatives Considered
 
@@ -181,7 +181,7 @@ ASHE-sealed-workspace orchestrates these substrates. Adopters keep their existin
 - Doesn't address agent-tool interaction (which is the primary motivator)
 
 **4. Require per-action user approval for all capability uses.** Rejected because:
-- Violates the frictionlessness principle
+- Violates the no-per-action-prompts principle
 - Empirically unusable; would kill adoption immediately
 - Misunderstands capability mediation as "approval prompt at every action"
 
@@ -201,7 +201,7 @@ ASHE-sealed-workspace orchestrates these substrates. Adopters keep their existin
 - ADR-014 — Phased enforcement model (sealed-workspace is achievable at Layer 1 cooperating; full enforcement requires Layer 3 OS-level mediation)
 - ADR-015 — Validation methodology and tiered claims (sealed-workspace performance + adoption claims are subject to benchmark publication per the v1 commitment)
 - ADR-016 (forthcoming) — Provenance requirements and capability-grounded content (sealed-workspace operations carry provenance per ADR-016 commitment)
-- ADR-018 — `.well-known/ashe` web-side interaction-point convention (peer surface convention: ADR-017 is ASHE's dev-side surface; ADR-018 is ASHE's web-side surface; together with ADR-014's agent-side enforcement trajectory they constitute ASHE's tri-surface architectural shape)
+- ADR-018 — `.well-known/ashe` web-side interaction-point convention (peer surface convention: ADR-017 is ASHE's dev-side surface; ADR-018 is ASHE's web-side surface; together with ADR-014's agent-side enforcement progression they constitute ASHE's tri-surface architectural shape)
 - ADR-019 (Proposed) — Execution-class distinction (provider-call / agent-worker / occupant). **ADR-019 requires amendment to ADR-017's role-template table** to add `ai-agent (occupant)` and `ai-agent (worker)` as named templates when ADR-019 migrates from Proposed to Accepted (pending working-code validation per CONSTRUCT-CLAUDE-OCCUPANCY-DESIGN-v0). The two new templates extend the existing role-template machinery; the protocol-tier execution-class distinction lives in ADR-019 while the per-template capability sets live here in ADR-017.
 
 ## Implementation notes
@@ -216,7 +216,7 @@ ASHE-sealed-workspace orchestrates these substrates. Adopters keep their existin
 
 **For other implementations**:
 
-- Rust implementation second priority (per ADR-014 trajectory toward runtime mediation; Rust is natural for OS-level integration)
+- Rust implementation second priority (per ADR-014 progression toward runtime mediation; Rust is natural for OS-level integration)
 - Python implementation third priority (large agent-framework userbase: LangChain, AutoGen, CrewAI)
 - Go implementation fourth priority (cloud-native deployment context)
 
@@ -229,7 +229,7 @@ ASHE-sealed-workspace orchestrates these substrates. Adopters keep their existin
 - Role-based capability sets (each defined role gets correct capabilities)
 - Composition with isolation substrates (DevContainer / gVisor / etc. integration works)
 - Migration from non-ASHE projects (import workflow produces functioning sealed workspace)
-- Frictionlessness measurement (per-operation overhead within budget; user-experience benchmarks; explicit-prompt frequency stays below defined threshold for representative workloads)
+- No-per-action-prompts measurement (per-operation overhead within budget; user-experience benchmarks; explicit-prompt frequency stays below defined threshold for representative workloads)
 
 **Migration path for existing projects**:
 
@@ -256,4 +256,4 @@ The protocol is the standard; the adapter ecosystem develops over time. v1 ships
 
 ---
 
-**ADR-017 commits ASHE to sealed-workspace as the foundational development-lifecycle pattern. The pattern is the answer to "what does ASHE actually look like in a developer's daily workflow." The frictionlessness principle is mandatory. Composition with existing isolation primitives is structural. Adoption is via `ashe workspace init` becoming step 1 of any new project — the same way `git init` is today.**
+**ADR-017 commits ASHE to sealed-workspace as the foundational development-lifecycle pattern. The pattern is the answer to "what does ASHE actually look like in a developer's daily workflow." The no-per-action-prompts principle is mandatory. Composition with existing isolation primitives is structural. Adoption is via `ashe workspace init` becoming step 1 of any new project — the same way `git init` is today.**

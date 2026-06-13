@@ -14,7 +14,7 @@ A central architectural property of ASHE is that **every action affecting state 
 
 The implementation reality is that enforcement strength depends on which layer enforces. A cooperating SDK enforces against cooperating clients but not against adversarial code; runtime mediation enforces against all code in the runtime but not against kernel-level compromise; hardware-rooted enforcement is the strongest but most expensive.
 
-This ADR commits ASHE to a **phased enforcement trajectory** that delivers progressively stronger enforcement guarantees while honestly naming what each phase can and cannot claim.
+This ADR commits ASHE to a **phased enforcement progression** that delivers progressively stronger enforcement guarantees while honestly naming what each phase can and cannot claim.
 
 ## Decision
 
@@ -29,7 +29,7 @@ This ADR commits ASHE to a **phased enforcement trajectory** that delivers progr
 
 (A theoretical Layer 5 — formally-verified microkernel mediating ASHE itself, seL4 model — exists as the asymptotic limit; ASHE doesn't currently target this but its architecture doesn't preclude it.)
 
-**Trajectory commitment** — ASHE's reference implementation progresses through layers over time:
+**Progression commitment** — ASHE's reference implementation progresses through layers over time:
 
 | ASHE version | Enforcement layer reached | Honest claim ASHE can make |
 |--------------|--------------------------|----------------------------|
@@ -41,7 +41,7 @@ This ADR commits ASHE to a **phased enforcement trajectory** that delivers progr
 
 **Each layer's claims are explicitly bounded by what that layer can structurally guarantee.** Marketing-language conflation across layers ("ASHE is unbypassable") is forbidden; each version states what it actually does.
 
-**Honest acknowledgment of limits** (from stress-test results during May 2026 conversation):
+**Honest acknowledgment of limits** (from challenges raised during the May 2026 conversation):
 
 - ASHE cannot detect arbitrary in-memory state changes (physics)
 - ASHE cannot prevent attacks within an authorized capability set (definition)
@@ -76,7 +76,7 @@ What ASHE CAN claim, by layer:
 **What becomes possible**:
 
 - ASHE deployable across a spectrum from "lightweight SDK for cooperating developers" to "hardware-anchored capability enforcement for high-stakes environments"
-- Long-term trajectory toward "agentic web with capability-mediated state changes structurally enforced at every layer"
+- Long-term progression toward "agentic web with capability-mediated state changes structurally enforced at every layer"
 - Honest positioning that earns trust rather than over-promising
 - Coexistence with existing security infrastructure — ASHE Layer 3 leverages eBPF / LSMs / sandbox tools that exist; ASHE Layer 4 leverages TPM / TEE that exist
 
