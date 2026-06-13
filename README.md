@@ -2,7 +2,7 @@
 
 **ASHE — a capability-broker protocol for the agent era.**
 
-An open specification by [Phor](https://phor.io) ™, published 2026-05-28.
+An open specification by [Phor](https://phor.io) ™. Published 2026-05-28; last updated 2026-06-13.
 
 ---
 
